@@ -9,6 +9,14 @@ module.exports = {
     extend: {
       spacing: {
         headerH: "7vh",
+        sceneW: "60vw",
+        sceneH: "60vh",
+        layout_themeW: "15vw",
+        layout_themeH: "93vh",
+        VW5: "5vw",
+      },
+      colors: {
+        layoutBg: "#2A2A2A",
       },
     },
   },
