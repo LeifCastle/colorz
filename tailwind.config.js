@@ -17,6 +17,8 @@ module.exports = {
       },
       colors: {
         layoutBg: "#2A2A2A",
+        headerNoSelect: "#2A2A2A",
+        headerSelect: "#6E7E65",
       },
     },
   },
