@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  mode: "jit",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -17,6 +18,8 @@ module.exports = {
       },
       colors: {
         layoutBg: "#2A2A2A",
+        headerNoSelect: "#2A2A2A",
+        headerSelect: "#6E7E65",
       },
     },
   },
