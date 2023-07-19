@@ -55,7 +55,7 @@ export default function Profile() {
     } else {
       router.push("/users/login");
     }
-  }, []);
+  }, [router]);
 
   if (isLoading) return <p>Loading...</p>;
   if (!data) return <p>No data shown...</p>;
