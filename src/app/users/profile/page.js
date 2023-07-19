@@ -32,28 +32,30 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    setAuthToken(localStorage.getItem("jwtToken"));
-    if (localStorage.getItem("jwtToken")) {
-      axios
-        .get(
-          `http://localhost:8000/users/email/${localStorage.getItem("email")}`
-        )
-        .then((response) => {
-          // data is an object
-          let userData = jwtDecode(localStorage.getItem("jwtToken"));
-          if (userData.email === localStorage.getItem("email")) {
-            setData(response.data.user[0]);
-            setLoading(false);
-          } else {
+    if (typeof window != undefined) {
+      setAuthToken(localStorage.getItem("jwtToken"));
+      if (localStorage.getItem("jwtToken")) {
+        axios
+          .get(
+            `http://localhost:8000/users/email/${localStorage.getItem("email")}`
+          )
+          .then((response) => {
+            // data is an object
+            let userData = jwtDecode(localStorage.getItem("jwtToken"));
+            if (userData.email === localStorage.getItem("email")) {
+              setData(response.data.user[0]);
+              setLoading(false);
+            } else {
+              router.push("/users/login");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
             router.push("/users/login");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          router.push("/users/login");
-        });
-    } else {
-      router.push("/users/login");
+          });
+      } else {
+        router.push("/users/login");
+      }
     }
   }, [router]);
 
