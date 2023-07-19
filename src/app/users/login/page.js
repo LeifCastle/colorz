@@ -26,24 +26,27 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent default html form refresh
     //Change post address to .env variable
-    axios
-      .post(`http://localhost:8000/users/login`, {
-        email,
-        password,
-      })
-      .then((response) => {
-        console.log("R:", response);
-        localStorage.setItem("jwtToken", response.data.token);
-        localStorage.setItem("email", response.data.userData.email);
-        localStorage.setItem("expiration", response.data.userData.exp);
-        setAuthToken(response.data.token);
-        let decoded = jwtDecode(response.data.token);
-        setRedirect(true);
-      })
-      .catch((error) => {
-        console.log("E:", error);
-        setError(error.response.data.message);
-      });
+    //----Sets user expiration time
+    if (typeof window !== undefined) {
+      axios
+        .post(`http://localhost:8000/users/login`, {
+          email,
+          password,
+        })
+        .then((response) => {
+          console.log("R:", response);
+          localStorage.setItem("jwtToken", response.data.token);
+          localStorage.setItem("email", response.data.userData.email);
+          localStorage.setItem("expiration", response.data.userData.exp);
+          setAuthToken(response.data.token);
+          let decoded = jwtDecode(response.data.token);
+          setRedirect(true);
+        })
+        .catch((error) => {
+          console.log("E:", error);
+          setError(error.response.data.message);
+        });
+    }
   };
 
   //----If user succesfully logs in redirect them to their profile page

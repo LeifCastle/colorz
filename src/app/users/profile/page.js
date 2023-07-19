@@ -28,10 +28,9 @@ export default function Profile() {
 
   //----Handles user logout functionality
   function handleLogoutButton() {
-    handleLogout();
-    router.push("/"); //Redirect user to home page
     if (typeof window !== undefined) {
-      console.log("TokenZ: ", localStorage.getItem("jwtToken"));
+      handleLogout();
+      router.push("/"); //Redirect user to home page
     }
   }
 
