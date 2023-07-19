@@ -8,6 +8,7 @@ import PageHeader from "../components/PageHeader";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import Box from "../components/Layout/Box";
+import TextBox from "@/components/Layout/TextBox";
 
 import Properties from "@/components/Properties";
 
@@ -86,6 +87,24 @@ export default function Home() {
     setCurrentElement(newElement); //Set current element equal to this
   }
 
+  function handleNewTextBox() {
+    let countArray = boxCount.current.split("");
+    let count = parseInt(countArray.pop());
+    boxCount.current = `textbox${count + 1}`; //Increment key/id counter
+    let newElement = (
+      <TextBox
+        key={boxCount.current}
+        id={boxCount.current}
+        type="textbox"
+        setCurrentElement={setCurrentElement}
+        handleNewProperty={newProperty}
+      />
+    );
+
+    setElements([...elements, newElement]);
+    setCurrentElement(newElement); //Set current element equal to this
+  }
+
   function newProperty(property) {
     console.log("key", currentElement.props.id);
     const propertyKey = Object.keys(property); //Get an array of properties keys (only 1)
@@ -116,7 +135,6 @@ export default function Home() {
   return (
     <currentElementContext.Provider value={currentElement}>
       <currentProperties.Provider value={sceneProperties}>
-        <PageHeader />
         <main className="flex justify-center w-screen">
           <div
             id="layout"
@@ -144,6 +162,16 @@ export default function Home() {
             >
               <div>
                 <span className="font-bold">+</span> Box
+              </div>
+            </div>
+            {/* New TextBox button */}
+            <div
+              id="addTextBox"
+              className="flex ml-5 mt-5 justify-center items-center border-white border-2 rounded-md w-[90px] h-[70px]"
+              onClick={handleNewTextBox}
+            >
+              <div>
+                <span className="font-bold">+</span> TextBox
               </div>
             </div>
           </div>
@@ -194,3 +222,4 @@ export default function Home() {
     </currentElementContext.Provider>
   );
 }
+
