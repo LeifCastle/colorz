@@ -103,7 +103,7 @@ export default function Login() {
             </button>
           </div>
           <br />
-          <h2>Don't have an account? Sign Up Now!</h2>
+          <h2>Don&apos;t have an account? Sign Up Now!</h2>
           <a href="/users/signup" type="button" className="bg-slate-600 mt-3">
             Register Now!
           </a>
