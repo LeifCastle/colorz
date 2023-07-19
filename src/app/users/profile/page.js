@@ -13,7 +13,7 @@ export default function Profile() {
   const [isLoading, setLoading] = useState(true);
 
   //----Sets user expiration time
-  if (typeof window != undefined) {
+  if (typeof window !== undefined) {
     const expirationTime = new Date(
       parseInt(localStorage.getItem("expiration")) * 1000
     );
@@ -30,13 +30,13 @@ export default function Profile() {
   function handleLogoutButton() {
     handleLogout();
     router.push("/"); //Redirect user to home page
-    if (typeof window != undefined) {
+    if (typeof window !== undefined) {
       console.log("TokenZ: ", localStorage.getItem("jwtToken"));
     }
   }
 
   useEffect(() => {
-    if (typeof window != undefined) {
+    if (typeof window !== undefined) {
       setAuthToken(localStorage.getItem("jwtToken"));
       if (localStorage.getItem("jwtToken")) {
         axios
