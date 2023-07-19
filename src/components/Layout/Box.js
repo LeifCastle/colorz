@@ -45,7 +45,7 @@ export default function Box({ id, setCurrentElement, handleNewProperty }) {
         }
       }
     }
-  }, [newProperties]);
+  }, [newProperties, currentElement.props.id, id]);
 
   //----Component to return (defined as a variable to allow the currentElement state to access it)
   let component = (
