@@ -13,22 +13,26 @@ export default function Profile() {
   const [isLoading, setLoading] = useState(true);
 
   //----Sets user expiration time
-  const expirationTime = new Date(
-    parseInt(localStorage.getItem("expiration")) * 1000
-  );
-  let currentTime = Date.now();
+  if (typeof window != undefined) {
+    const expirationTime = new Date(
+      parseInt(localStorage.getItem("expiration")) * 1000
+    );
+    let currentTime = Date.now();
 
-  //----Lougout user after expiration time is met
-  if (currentTime >= expirationTime) {
-    handleLogout();
-    router.push("/users/login");
+    //----Lougout user after expiration time is met
+    if (currentTime >= expirationTime) {
+      handleLogout();
+      router.push("/users/login");
+    }
   }
 
   //----Handles user logout functionality
   function handleLogoutButton() {
     handleLogout();
     router.push("/"); //Redirect user to home page
-    console.log("TokenZ: ", localStorage.getItem("jwtToken"));
+    if (typeof window != undefined) {
+      console.log("TokenZ: ", localStorage.getItem("jwtToken"));
+    }
   }
 
   useEffect(() => {

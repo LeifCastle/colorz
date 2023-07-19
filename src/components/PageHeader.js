@@ -7,10 +7,13 @@ export default function PageHeader() {
   const [signup_login, setSignup_login] = useState("login");
 
   useEffect(() => {
-    if (localStorage.getItem("jwtToken")) {
-      setSignup_login("profile");
-    } else {
-      setSignup_login("login");
+    //----Sets user expiration time
+    if (typeof window != undefined) {
+      if (localStorage.getItem("jwtToken")) {
+        setSignup_login("profile");
+      } else {
+        setSignup_login("login");
+      }
     }
   }, []);
 
