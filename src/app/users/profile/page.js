@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/navigation";
-import handleLogout from "@/app/utils/handleLogout";
+import handleLogout from "../../utils/handleLogout";
 import axios from "axios";
-import setAuthToken from "@/app/utils/setAuthToken";
+import setAuthToken from "../../utils/setAuthToken";
 import PageHeader from "../../../components/PageHeader";
 
 export default function Profile() {

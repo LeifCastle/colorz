@@ -20,6 +20,7 @@ export default function Home() {
   const [sceneFooter, setSceneFooter] = useState(false); //Scene footer
   const [sceneProperties, setSceneProperties] = useState({}); //An element's height
   const [exp, setExp] = useState();
+  const fullscreen = useRef(false);
 
   function handleNewHeader(event) {
     if (!sceneHeader) {
@@ -194,7 +195,35 @@ export default function Home() {
     setExp();
   }
 
-  //----Manages border for selected current element
+  //----------Full Screen---------\\  Bugs present
+  function handleFullscreen() {
+    const scene = document.querySelector("#scene");
+    if (!fullscreen.current) {
+      scene.requestFullscreen();
+      document.addEventListener("fullscreenchange", onFullscreenChange);
+    }
+  }
+
+  const onFullscreenChange = () => {
+    const scene = document.querySelector("#scene");
+    fullscreen.current ? (scene.style.zoom = "1") : (scene.style.zoom = "1.67");
+    fullscreen.current = !fullscreen.current;
+  };
+
+  //----------Clear Screen---------\\
+  function handleClearscreen() {
+    let header = document.querySelector("#sh");
+    let footer = document.querySelector("#sf");
+    header.classList.remove("bg-headerSelect");
+    footer.classList.remove("bg-headerSelect");
+    header.classList.add("bg-headerNoSelect");
+    footer.classList.add("bg-headerNoSelect");
+    setElements([]);
+    setSceneHeader(false);
+    setSceneFooter(false);
+  }
+
+  //----------Manages border for selected current element---------\\
   useEffect(() => {
     if (currentElement) {
       console.log("Name: ", currentElement.props.name);
@@ -220,6 +249,7 @@ export default function Home() {
           >
             <p className="text-center text-2xl mb-4">Layout</p>
             <button
+              id="sh"
               className="border-white border-2 pl-8 pr-8 mb-2 rounded-md"
               onClick={handleNewHeader}
             >
@@ -227,6 +257,7 @@ export default function Home() {
             </button>
             <br />
             <button
+              id="sf"
               className="border-white border-2 pl-8 pr-8 rounded-md"
               onClick={handleNewFooter}
             >
@@ -286,6 +317,8 @@ export default function Home() {
               <button className="border-white border-2 pl-1 pr-1 rounded-md">
                 Save Theme
               </button>
+              <button onClick={handleFullscreen}>Fullscreen</button>
+              <button onClick={handleClearscreen}>Clear Screen</button>
             </div>
           </div>
           <div

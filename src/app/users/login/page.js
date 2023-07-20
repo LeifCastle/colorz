@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import setAuthToken from "@/app/utils/setAuthToken";
+import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
 import PageHeader from "../../../components/PageHeader";
 
