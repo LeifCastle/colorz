@@ -4,7 +4,12 @@ import { useContext, useState, useEffect } from "react";
 import { currentProperties } from "../../app/context";
 import { currentElementContext } from "../../app/context";
 
-export default function Box({ id, setCurrentElement, handleNewProperty }) {
+export default function Box({
+  id,
+  name,
+  setCurrentElement,
+  handleNewProperty,
+}) {
   //----Context
   const newProperties = useContext(currentProperties);
   const currentElement = useContext(currentElementContext);
@@ -22,6 +27,7 @@ export default function Box({ id, setCurrentElement, handleNewProperty }) {
 
   //----If this element's id matches the theme element's id assign new property values,
   for (let element in newProperties) {
+    console.log("Element: ", element, "Id: ", id);
     if (element === id) {
       for (let property in newProperties[element]) {
         if (property !== "width" && property != "height") {
@@ -52,6 +58,7 @@ export default function Box({ id, setCurrentElement, handleNewProperty }) {
     <Rnd
       key={id}
       id={id}
+      name={name}
       type="box"
       className={`sceneC bg-[#696767]`}
       style={defaultProperties}

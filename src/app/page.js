@@ -77,6 +77,7 @@ export default function Home() {
       <Box
         key={boxCount.current}
         id={boxCount.current}
+        name={boxCount.current}
         type="box"
         setCurrentElement={setCurrentElement}
         handleNewProperty={newProperty}
@@ -106,7 +107,6 @@ export default function Home() {
   }
 
   function newProperty(property) {
-    console.log("key", currentElement.props.id);
     const propertyKey = Object.keys(property); //Get an array of properties keys (only 1)
     let newKey = propertyKey[0]; //Get the new property's key
     let propertiesCopy = { ...sceneProperties }; //Create a copy of current properties
@@ -120,9 +120,9 @@ export default function Home() {
   //----Manages border for selected current element
   useEffect(() => {
     if (currentElement) {
+      console.log("Name: ", currentElement.props.name);
       let allSceneElements = document.querySelectorAll(`.sceneC`);
       allSceneElements.forEach((element) => {
-        console.log("CE: ", currentElement, "This E: ", element.id);
         if (element.id != currentElement.props.id) {
           element.style.border = "none";
         } else {
@@ -135,6 +135,7 @@ export default function Home() {
   return (
     <currentElementContext.Provider value={currentElement}>
       <currentProperties.Provider value={sceneProperties}>
+        <PageHeader />
         <main className="flex justify-center w-screen">
           <div
             id="layout"
@@ -222,4 +223,3 @@ export default function Home() {
     </currentElementContext.Provider>
   );
 }
-

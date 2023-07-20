@@ -8,7 +8,7 @@ export default function PageHeader() {
 
   useEffect(() => {
     //----Sets user expiration time
-    if (typeof window != undefined) {
+    if (typeof window !== undefined) {
       if (localStorage.getItem("jwtToken")) {
         setSignup_login("profile");
       } else {

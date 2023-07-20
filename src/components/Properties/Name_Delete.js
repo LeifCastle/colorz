@@ -8,7 +8,7 @@ export default function Name_Delete({
   setCurrentElement,
 }) {
   const currentElement = useContext(currentElementContext);
-  const [nameDisplay, setNameDisplay] = useState(currentElement.props.id);
+  const [nameDisplay, setNameDisplay] = useState(currentElement.props.name);
 
   //----Deletes an element from the scene
   function handleDeleteElement() {
@@ -27,7 +27,7 @@ export default function Name_Delete({
     setNameDisplay(
       <input
         className="text-black w-[70px]"
-        placeholder={currentElement.props.id}
+        placeholder={currentElement.props.name}
       ></input>
     );
   }
@@ -39,9 +39,9 @@ export default function Name_Delete({
       elements.forEach((element) => {
         //----If the element's key does not match the currentElement's key keep it
         if (element.props.id === currentElement.props.id) {
-          let id = event.target.value;
+          let name = event.target.value;
           const editableCopy = cloneElement(element, {
-            id,
+            name,
           });
           newElements.push(editableCopy);
           setCurrentElement(editableCopy);
@@ -51,12 +51,12 @@ export default function Name_Delete({
       });
       setElements(newElements);
     }
-    setNameDisplay(currentElement.props.id);
+    setNameDisplay(currentElement.props.name);
   }
 
   //----Updates display name when user changes the current Element
   useEffect(() => {
-    setNameDisplay(currentElement.props.id);
+    setNameDisplay(currentElement.props.name);
   }, [currentElement]);
 
   return (
