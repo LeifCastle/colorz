@@ -53,9 +53,6 @@ Open your preferred browser and navigate to http://localhost:3000 to start desig
 2. **Advanced Color Picker**:
    - Integrate an advanced color picker tool with gradient and palette generation.
 
-3. **User Accounts**:
-   - Implement user authentication to allow saving and retrieving personal themes.
-
-4. **Mobile Responsiveness**:
+3. **Mobile Responsiveness**:
    - Enhance the UI/UX for mobile devices ensuring a seamless experience across all device sizes.
 
