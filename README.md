@@ -1,34 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Colorz
 
-## Getting Started
+Colorz is a dynamic theme builder that allows users to create, modify, and visualize custom themes with ease. With a user-friendly interface, Colorz provides a canvas for creativity, enabling users to design themes by manipulating various elements such as headers, footers, boxes, and text boxes.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- **Drag & Drop Interface**: Easily place elements like headers, footers, boxes, and text boxes on the canvas.
+- **Dynamic Properties Panel**: Adjust properties like height, width, background color, font size, and font family for each element.
+- **Responsive Design**: The layout is designed to be responsive, ensuring a seamless experience across devices.
+- **Export & Save**: Once you've designed your theme, you can export or save it for future use.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Wireframes
+![Design](https://i.gyazo.com/35eac007d10e37b25571ebb1ff94889b.png)
+![ERD](https://i.gyazo.com/7e36d3a2a1174b7a55f4b337ac1cbe79.png)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+# Install ## Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Follow these steps to get Colorz up and running on your local machine:
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+Ensure you have the following installed on your local development machine:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Node.js](https://nodejs.org/en/) (v14 or above)
+- [npm](https://www.npmjs.com/) (v6 or above)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Installation and Setup
 
-## Deploy on Vercel
+1. **Clone the repository**:
+  ```bash
+  git clone https://github.com/LeifCastle/colorz.git
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Navigate to the project directory**:
+  ```bash
+  cd colorz
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+3. **Install the required dependencies**:
+  ```bash
+  npm install
+  ```
+
+Access the Application:
+Open your preferred browser and navigate to http://localhost:3000 to start designing your theme!
+
+## 🚀 Future Implementations
+
+1. **Theme Sharing**: 
+   - Allow users to share their created themes with the community.
+   - Implement a rating system for shared themes.
+
+2. **Advanced Color Picker**:
+   - Integrate an advanced color picker tool with gradient and palette generation.
+
+3. **User Accounts**:
+   - Implement user authentication to allow saving and retrieving personal themes.
+
+4. **Mobile Responsiveness**:
+   - Enhance the UI/UX for mobile devices ensuring a seamless experience across all device sizes.
+
