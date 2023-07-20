@@ -19,6 +19,7 @@ export default function Home() {
   const [sceneHeader, setSceneHeader] = useState(false); //Scene header
   const [sceneFooter, setSceneFooter] = useState(false); //Scene footer
   const [sceneProperties, setSceneProperties] = useState({}); //An element's height
+  const [exp, setExp] = useState();
 
   function handleNewHeader(event) {
     if (!sceneHeader) {
@@ -117,6 +118,82 @@ export default function Home() {
     setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
   }
 
+  //----Handles export data gathering
+  function handleExport() {
+    let exportData = {};
+    if (sceneHeader) {
+      let css = document.querySelector(`#SceneHeader`);
+      exportData["header"] = {
+        backgroundColor: css.firstChild.style.backgroundColor,
+      };
+    }
+    elements.forEach((element) => {
+      let css = document.querySelector(`#${element.props.id}`);
+      if (element.props.type === "box") {
+        exportData[element.props.name] = {
+          backgroundColor: css.style.backgroundColor,
+        };
+      }
+    });
+    if (sceneFooter) {
+      let css = document.querySelector(`#SceneFooter`);
+      exportData["footer"] = {
+        backgroundColor: css.firstChild.style.backgroundColor,
+      };
+    }
+
+    let el = [];
+    for (let element in exportData) {
+      let elStyle = [];
+      for (let style in exportData[element]) {
+        elStyle.push(<div>{`${style}: ${exportData[element][style]}`}</div>);
+      }
+      el.push(
+        <li>
+          <div className="text-lg">{`#${element}${" "}`}&#123;</div>
+          <div>{elStyle}</div>
+          <span>&#125;</span>
+        </li>
+      );
+    }
+
+    setExp(
+      <div>
+        <ul>{el}</ul>
+        <button onClick={handleHideExport}>Hide Export</button>
+      </div>
+    );
+
+    //----Disable main page buttons
+    let scene = document.querySelector("#scene");
+    let layout = document.querySelector("#layout");
+    let children = layout.querySelectorAll("*");
+    let exportButton = document.querySelector("#export");
+    exportButton.setAttribute("disabled", "disabled");
+    children.forEach((child) => {
+      child.setAttribute("disabled", "disabled");
+    });
+    scene.childNodes.forEach((child) => {
+      child.setAttribute("hidden", "hidden");
+    });
+  }
+
+  function handleHideExport() {
+    //----Enable main page buttons
+    let layout = document.querySelector("#layout");
+    let scene = document.querySelector("#scene");
+    let exportButton = document.querySelector("#export");
+    let children = layout.querySelectorAll("*");
+    exportButton.removeAttribute("disabled");
+    children.forEach((child) => {
+      child.removeAttribute("disabled");
+    });
+    scene.childNodes.forEach((child) => {
+      child.removeAttribute("hidden");
+    });
+    setExp();
+  }
+
   //----Manages border for selected current element
   useEffect(() => {
     if (currentElement) {
@@ -156,7 +233,7 @@ export default function Home() {
               Footer
             </button>
             <hr></hr>
-            <div
+            <button
               id="addBox"
               className="flex ml-5 mt-5 justify-center items-center border-white border-2 rounded-md w-[70px] h-[70px]"
               onClick={handleNewBox}
@@ -164,9 +241,9 @@ export default function Home() {
               <div>
                 <span className="font-bold">+</span> Box
               </div>
-            </div>
+            </button>
             {/* New TextBox button */}
-            <div
+            <button
               id="addTextBox"
               className="flex ml-5 mt-5 justify-center items-center border-white border-2 rounded-md w-[90px] h-[70px]"
               onClick={handleNewTextBox}
@@ -174,20 +251,21 @@ export default function Home() {
               <div>
                 <span className="font-bold">+</span> TextBox
               </div>
-            </div>
+            </button>
           </div>
           <div>
             <div
               id="scene"
               className="flex-col w-sceneW h-sceneH mt-10 border-white border-2 rounded-sm"
             >
-              <div id="header" className="basis-content">
+              {exp}
+              <div id="SceneHeader" className="basis-content">
                 {sceneHeader}
               </div>
               <div id="moveable" className="grow relative cursor-move">
                 {elements}
               </div>
-              <div id="footer" className="basis-content">
+              <div id="SceneFooter" className="basis-content">
                 {sceneFooter}
               </div>
             </div>
@@ -198,7 +276,11 @@ export default function Home() {
               <hr className="w-40"></hr>
             </div>
             <div className="flex justify-center gap-40 mt-10">
-              <button className="border-white border-2 pl-1 pr-1 rounded-md">
+              <button
+                id="export"
+                className="border-white border-2 pl-1 pr-1 rounded-md"
+                onClick={handleExport}
+              >
                 Export Theme
               </button>
               <button className="border-white border-2 pl-1 pr-1 rounded-md">
