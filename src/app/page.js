@@ -8,9 +8,10 @@ import PageHeader from "../components/PageHeader";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import Box from "../components/Layout/Box";
-import TextBox from "@/components/Layout/TextBox";
+import TextBox from "../components/Layout/TextBox";
+import Background from "../components/Layout/Background";
 
-import Properties from "@/components/Properties";
+import Properties from "../components/Properties";
 
 export default function Home() {
   const [currentElement, setCurrentElement] = useState(); //current element context
@@ -287,15 +288,17 @@ export default function Home() {
           <div>
             <div
               id="scene"
-              className="flex-col w-sceneW h-sceneH mt-10 border-white border-2 rounded-sm"
+              className="flex-col w-sceneW h-sceneH mt-10  rounded-sm"
             >
               {exp}
               <div id="SceneHeader" className="basis-content">
                 {sceneHeader}
               </div>
-              <div id="moveable" className="grow relative cursor-move">
-                {elements}
-              </div>
+              <Background
+                id="moveable"
+                elements={elements}
+                setCurrentElement={setCurrentElement}
+              />
               <div id="SceneFooter" className="basis-content">
                 {sceneFooter}
               </div>
