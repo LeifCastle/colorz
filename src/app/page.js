@@ -24,9 +24,17 @@ export default function Home() {
   const fullscreen = useRef(false);
 
   function handleNewHeader(event) {
+    let scene = document.querySelector("#moveable");
     if (!sceneHeader) {
-      event.target.classList.remove("bg-headerNoSelect");
-      event.target.classList.add("bg-headerSelect");
+      //Remove rounding
+      scene.classList.remove("rounded-tl-md");
+      scene.classList.remove("rounded-tr-md");
+      //Border
+      event.target.classList.remove("border-lhfBorderNoSelect");
+      event.target.classList.add("border-lhfBorderSelect");
+      //Bacground
+      event.target.classList.remove("bg-lhfBackgroundNoSelect");
+      event.target.classList.add("bg-lhfBackgroundSelect");
       let newElement = (
         <Header
           key="header"
@@ -38,15 +46,33 @@ export default function Home() {
       setSceneHeader(newElement);
       setCurrentElement(newElement); //Set current element equal to this
     } else {
-      event.target.classList.remove("bg-headerSelect");
-      event.target.classList.add("bg-headerNoSelect");
+      scene.classList.add("rounded-tl-md");
+      scene.classList.add("rounded-tr-md");
+      ///Border
+      event.target.classList.remove("border-lhfBorderSelect");
+      event.target.classList.add("border-lhfBorderNoSelect");
+      //Background
+      event.target.classList.remove("bg-lhfBackgroundSelect");
+      event.target.classList.add("bg-lhfBackgroundNoSelect");
       setSceneHeader(false);
       //Need to change current element as well
     }
   }
 
   function handleNewFooter(event) {
+    let scene = document.querySelector("#moveable");
     if (!sceneFooter) {
+      //Remove rounding
+      scene.classList.remove("rounded-bl-md");
+      scene.classList.remove("rounded-br-md");
+      //Border
+      event.target.classList.remove("border-lhfBorderNoSelect");
+      event.target.classList.add("border-lhfBorderSelect");
+      //Bacground
+      event.target.classList.remove("bg-lhfBackgroundNoSelect");
+      event.target.classList.add("bg-lhfBackgroundSelect");
+
+      //Show footer selection in Layout
       event.target.classList.remove("bg-headerNoSelect");
       event.target.classList.add("bg-headerSelect");
       let newElement = (
@@ -60,19 +86,20 @@ export default function Home() {
       setSceneFooter(newElement);
       setCurrentElement(newElement); //Set current element equal to this
     } else {
-      event.target.classList.remove("bg-headerSelect");
-      event.target.classList.add("bg-headerNoSelect");
+      scene.classList.add("rounded-bl-md");
+      scene.classList.add("rounded-br-md");
+      ///Border
+      event.target.classList.remove("border-lhfBorderSelect");
+      event.target.classList.add("border-lhfBorderNoSelect");
+      //Background
+      event.target.classList.remove("bg-lhfBackgroundSelect");
+      event.target.classList.add("bg-lhfBackgroundNoSelect");
       setSceneFooter(false);
       //Need to change current element as well
     }
   }
 
-  function handleNewBox() {
-    let addBox = document.querySelector("#addBox");
-    addBox.style.backgroundColor = "yellow";
-    setTimeout(() => {
-      addBox.style.backgroundColor = "";
-    }, 100);
+  function handleNewBox(event) {
     let countArray = boxCount.current.split("");
     let count = parseInt(countArray.pop());
     boxCount.current = `box${count + 1}`; //Increment key/id counter
@@ -123,12 +150,20 @@ export default function Home() {
   //----Handles export data gathering
   function handleExport() {
     let exportData = {};
+
+    //--Background
+    let css = document.querySelector(`#moveable`);
+    exportData["background"] = { backgroundColor: css.style.backgroundColor };
+
+    //Header
     if (sceneHeader) {
       let css = document.querySelector(`#SceneHeader`);
       exportData["header"] = {
         backgroundColor: css.firstChild.style.backgroundColor,
       };
     }
+
+    //Scene Elements
     elements.forEach((element) => {
       let css = document.querySelector(`#${element.props.id}`);
       if (element.props.type === "box") {
@@ -137,6 +172,8 @@ export default function Home() {
         };
       }
     });
+
+    //Footer
     if (sceneFooter) {
       let css = document.querySelector(`#SceneFooter`);
       exportData["footer"] = {
@@ -152,9 +189,9 @@ export default function Home() {
       }
       el.push(
         <li>
-          <div className="text-lg">{`#${element}${" "}`}&#123;</div>
-          <div>{elStyle}</div>
-          <span>&#125;</span>
+          <div className="text-yellow-200">{`#${element}${" "}`}&#123;</div>
+          <div className="text-white ml-4">{elStyle}</div>
+          <span className="text-yellow-200">&#125;</span>
         </li>
       );
     }
@@ -196,6 +233,23 @@ export default function Home() {
     setExp();
   }
 
+  //----Handles css properties to visually show user they clicked
+  function handleLayoutButtonMouseDown(e) {
+    e.target.classList.remove("border-lhfBorderNoSelect");
+    e.target.classList.add("border-lhfBorderSelect");
+    e.target.classList.remove("bg-lhfBackgroundNoSelect");
+    e.target.classList.add("bg-lhfBackgroundSelect");
+  }
+
+  function handleLayoutButtonMouseUp(e) {
+    setTimeout(() => {
+      e.target.classList.remove("border-lhfBorderSelect");
+      e.target.classList.add("border-lhfBorderNoSelect");
+      e.target.classList.remove("bg-lhfBackgroundSelect");
+      e.target.classList.add("bg-lhfBackgroundNoSelect");
+    }, 50);
+  }
+
   //----------Full Screen---------\\  Bugs present
   function handleFullscreen() {
     const scene = document.querySelector("#scene");
@@ -213,12 +267,21 @@ export default function Home() {
 
   //----------Clear Screen---------\\
   function handleClearscreen() {
+    let scene = document.querySelector("#moveable");
+    scene.classList.add("rounded-tl-md");
+    scene.classList.add("rounded-tr-md");
+    scene.classList.add("rounded-bl-md");
+    scene.classList.add("rounded-br-md");
     let header = document.querySelector("#sh");
     let footer = document.querySelector("#sf");
-    header.classList.remove("bg-headerSelect");
-    footer.classList.remove("bg-headerSelect");
-    header.classList.add("bg-headerNoSelect");
-    footer.classList.add("bg-headerNoSelect");
+    header.classList.remove("border-lhfBorderSelect");
+    header.classList.add("border-lhfBorderNoSelect");
+    header.classList.remove("bg-lhfBackgroundSelect");
+    header.classList.add("bg-lhfBackgroundNoSelect");
+    footer.classList.remove("border-lhfBorderSelect");
+    footer.classList.add("border-lhfBorderNoSelect");
+    footer.classList.remove("bg-lhfBackgroundSelect");
+    footer.classList.add("bg-lhfBackgroundNoSelect");
     setElements([]);
     setSceneHeader(false);
     setSceneFooter(false);
@@ -243,46 +306,48 @@ export default function Home() {
     <currentElementContext.Provider value={currentElement}>
       <currentProperties.Provider value={sceneProperties}>
         <PageHeader />
-        <main className="flex justify-center w-screen">
+        <main className="flex justify-center w-screen bg-layoutBg">
           <div
             id="layout"
-            className="mr-VW5 w-layout_themeW h-layout_themeH bg-layoutBg"
+            className="flex-col items-center mr-VW5 mt-VW1 ml-2 w-layout_themeW h-layoutH bg-pageHBg text-layoutText_Border rounded-md" //#241B1B
           >
-            <p className="text-center text-2xl mb-4">Layout</p>
-            <button
-              id="sh"
-              className="border-white border-2 pl-8 pr-8 mb-2 rounded-md"
-              onClick={handleNewHeader}
-            >
-              Header
-            </button>
-            <br />
-            <button
-              id="sf"
-              className="border-white border-2 pl-8 pr-8 rounded-md"
-              onClick={handleNewFooter}
-            >
-              Footer
-            </button>
-            <hr></hr>
+            <p className="text-center text-2xl mb-4 w-full bg-[#4E4B3C] rounded-tl-md rounded-tr-md text-gray-200">
+              Layout
+            </p>
+            <div className="flex justify-center gap-2 mb-3">
+              <button
+                id="sh"
+                className="border-lhfBorderNoSelect bg-lhfBackgroundNoSelect border-2 pl-4 pr-4 h-[35px] rounded-md"
+                onClick={handleNewHeader}
+              >
+                Header
+              </button>
+              <button
+                id="sf"
+                className="border-lhfBorderNoSelect bg-lhfBackgroundNoSelect border-2 pl-4 pr-4 h-[35px] rounded-md"
+                onClick={handleNewFooter}
+              >
+                Footer
+              </button>
+            </div>
+            <hr className="w-full"></hr>
             <button
               id="addBox"
-              className="flex ml-5 mt-5 justify-center items-center border-white border-2 rounded-md w-[70px] h-[70px]"
+              className="mt-5 bg-lhfBackgroundNoSelect border-lhfBorderNoSelect border-2 rounded-md w-VW12 h-[70px]"
               onClick={handleNewBox}
+              onMouseDown={handleLayoutButtonMouseDown}
+              onMouseUp={handleLayoutButtonMouseUp}
             >
-              <div>
-                <span className="font-bold">+</span> Box
-              </div>
+              Add Box
             </button>
-            {/* New TextBox button */}
             <button
               id="addTextBox"
-              className="flex ml-5 mt-5 justify-center items-center border-white border-2 rounded-md w-[90px] h-[70px]"
+              className="flex mt-5 justify-center items-center bg-lhfBackgroundNoSelect border-lhfBorderNoSelect border-2 rounded-md w-VW12 h-[40px]"
               onClick={handleNewTextBox}
+              onMouseDown={handleLayoutButtonMouseDown}
+              onMouseUp={handleLayoutButtonMouseUp}
             >
-              <div>
-                <span className="font-bold">+</span> TextBox
-              </div>
+              Add Text
             </button>
           </div>
           <div>
@@ -302,12 +367,6 @@ export default function Home() {
               <div id="SceneFooter" className="basis-content">
                 {sceneFooter}
               </div>
-            </div>
-            <div className="flex justify-center">
-              <div className="w-10 h-20 border-white border-2"></div>
-            </div>
-            <div className="flex justify-center">
-              <hr className="w-40"></hr>
             </div>
             <div className="flex justify-center gap-40 mt-10">
               <button

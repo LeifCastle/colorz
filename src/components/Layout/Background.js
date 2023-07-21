@@ -31,7 +31,7 @@ export default function Background({ id, elements, setCurrentElement }) {
       id={id}
       name={id}
       type="background"
-      className="sceneC grow"
+      className="sceneC grow rounded-tl-md rounded-tr-md rounded-bl-md rounded-br-md"
       style={defaultProperties}
       onMouseDown={updateCurrentElement} //onMouseDown vs onClick workaround, casuses very small short visual discrepency tho
     >

@@ -7,8 +7,8 @@ export default function Footer({ id, setCurrentElement }) {
 
   //----Element's default properties
   let defaultProperties = {
-    height: "20px",
-    background: "#2A2A2A",
+    height: "25px",
+    backgroundColor: "#464331",
   };
 
   //----If this element's id matches the user's currently selected element id assign new property values
@@ -26,7 +26,7 @@ export default function Footer({ id, setCurrentElement }) {
       key={id}
       id={id}
       type="footer"
-      className={`sceneC w-sceneW text-black text-center`}
+      className={`sceneC w-sceneW text-black text-center rounded-bl-md rounded-br-md`}
       style={defaultProperties}
       onClick={updateCurrentElement}
     >

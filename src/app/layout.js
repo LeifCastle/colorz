@@ -1,5 +1,11 @@
 import "./globals.css";
-import Header from "../components/PageHeader";
+import { Catamaran } from "next/font/google";
+
+const catamaran = Catamaran({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-catamaran",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -8,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={catamaran.variable}>
       <body className="h-screen">{children}</body>
     </html>
   );

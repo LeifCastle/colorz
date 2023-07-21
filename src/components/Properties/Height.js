@@ -12,7 +12,7 @@ export default function Height({ handleNewProperty }) {
       <p>Height: </p>
       <input
         type="text"
-        placeholder="20px"
+        placeholder="30px"
         value={
           newProperties[currentElement.props.id]
             ? newProperties[currentElement.props.id].height

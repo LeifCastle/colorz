@@ -60,7 +60,7 @@ export default function Box({
       id={id}
       name={name}
       type="box"
-      className={`sceneC bg-[#696767]`}
+      className={`sceneC bg-[#696767] rounded-md`}
       style={defaultProperties}
       bounds={"parent"}
       size={{

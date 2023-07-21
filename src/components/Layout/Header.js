@@ -7,8 +7,8 @@ export default function Header({ id, setCurrentElement }) {
 
   //----Element's default properties
   let defaultProperties = {
-    height: "20px",
-    backgroundColor: "#2A2A2A",
+    height: "30px",
+    backgroundColor: "#7C6043",
   };
 
   //----If this element's id matches the user's currently selected element id assign new property values
@@ -26,7 +26,7 @@ export default function Header({ id, setCurrentElement }) {
       key={id}
       id={id}
       type="header"
-      className={`sceneC w-sceneW text-black text-center`}
+      className={`sceneC w-sceneW text-black text-center rounded-tl-md rounded-tr-md`}
       style={defaultProperties}
       onClick={updateCurrentElement}
     >
