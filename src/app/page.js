@@ -10,6 +10,7 @@ import Footer from "../components/Layout/Footer";
 import Box from "../components/Layout/Box";
 import TextBox from "../components/Layout/TextBox";
 import Background from "../components/Layout/Background";
+import Empty from "../components/Empty";
 
 import Properties from "../components/Properties";
 
@@ -44,6 +45,7 @@ export default function Home() {
         />
       );
       setSceneHeader(newElement);
+
       setCurrentElement(newElement); //Set current element equal to this
     } else {
       scene.classList.add("rounded-tl-md");
@@ -147,90 +149,102 @@ export default function Home() {
     setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
   }
 
-  //----Handles export data gathering
+  //----Handles export data gathering and scene show/hide
   function handleExport() {
     let exportData = {};
 
-    //--Background
-    let css = document.querySelector(`#moveable`);
-    exportData["background"] = { backgroundColor: css.style.backgroundColor };
+    let exportButton = document.querySelector("#export");
+    if (exportButton.textContent === "Export Theme") {
+      exportButton.textContent = "Hide Export";
 
-    //Header
-    if (sceneHeader) {
-      let css = document.querySelector(`#SceneHeader`);
-      exportData["header"] = {
-        backgroundColor: css.firstChild.style.backgroundColor,
-      };
-    }
+      //--Background
+      let css = document.querySelector(`#moveable`);
+      exportData["background"] = { backgroundColor: css.style.backgroundColor };
 
-    //Scene Elements
-    elements.forEach((element) => {
-      let css = document.querySelector(`#${element.props.id}`);
-      if (element.props.type === "box") {
-        exportData[element.props.name] = {
-          backgroundColor: css.style.backgroundColor,
+      //Header
+      if (sceneHeader) {
+        let css = document.querySelector(`#SceneHeader`);
+        exportData["header"] = {
+          backgroundColor: css.firstChild.style.backgroundColor,
         };
       }
-    });
 
-    //Footer
-    if (sceneFooter) {
-      let css = document.querySelector(`#SceneFooter`);
-      exportData["footer"] = {
-        backgroundColor: css.firstChild.style.backgroundColor,
-      };
-    }
+      //Scene Elements
+      elements.forEach((element) => {
+        let css = document.querySelector(`#${element.props.id}`);
+        if (element.props.type === "box") {
+          exportData[element.props.name] = {
+            backgroundColor: css.style.backgroundColor,
+          };
+        }
+      });
 
-    let el = [];
-    for (let element in exportData) {
-      let elStyle = [];
-      for (let style in exportData[element]) {
-        elStyle.push(<div>{`${style}: ${exportData[element][style]}`}</div>);
+      //Footer
+      if (sceneFooter) {
+        let css = document.querySelector(`#SceneFooter`);
+        exportData["footer"] = {
+          backgroundColor: css.firstChild.style.backgroundColor,
+        };
       }
-      el.push(
-        <li>
-          <div className="text-yellow-200">{`#${element}${" "}`}&#123;</div>
-          <div className="text-white ml-4">{elStyle}</div>
-          <span className="text-yellow-200">&#125;</span>
-        </li>
+
+      let el = [];
+      for (let element in exportData) {
+        let elStyle = [];
+        for (let style in exportData[element]) {
+          elStyle.push(<div>{`${style}: ${exportData[element][style]}`}</div>);
+        }
+        el.push(
+          <li>
+            <div className="text-yellow-200">{`#${element}${" "}`}&#123;</div>
+            <div className="text-white ml-4">{elStyle}</div>
+            <span className="text-yellow-200">&#125;</span>
+          </li>
+        );
+      }
+
+      setExp(
+        <div className="bg-[#49525A] rounded-md p-3 overflow-y-scroll">
+          <ul>{el}</ul>
+        </div>
       );
+
+      //----Disable main page buttons
+      let layout = document.querySelector("#layout");
+      let children = layout.querySelectorAll("*");
+      children.forEach((child) => {
+        child.setAttribute("disabled", "disabled");
+      });
+
+      //Hide Scene
+      let scene = document.querySelector("#scene");
+      let sceneD = scene.querySelectorAll("*");
+      sceneD.forEach((element) => {
+        element.setAttribute("hidden", "hidden");
+        element.style.display = "none";
+      });
+    } else {
+      let exportButton = document.querySelector("#export");
+      exportButton.textContent = "Export Theme";
+      //----Enable main page buttons
+      let layout = document.querySelector("#layout");
+      let scene = document.querySelector("#scene");
+      let children = layout.querySelectorAll("*");
+      children.forEach((child) => {
+        child.removeAttribute("disabled");
+      });
+
+      //Show Scene
+      let sceneD = scene.querySelectorAll("*");
+      sceneD.forEach((element) => {
+        element.removeAttribute("hidden");
+        if (element.id != "header" && element.id != "footer") {
+          element.style.display = "inline-block";
+        } else {
+          element.style.display = "block";
+        }
+      });
+      setExp();
     }
-
-    setExp(
-      <div>
-        <ul>{el}</ul>
-        <button onClick={handleHideExport}>Hide Export</button>
-      </div>
-    );
-
-    //----Disable main page buttons
-    let scene = document.querySelector("#scene");
-    let layout = document.querySelector("#layout");
-    let children = layout.querySelectorAll("*");
-    let exportButton = document.querySelector("#export");
-    exportButton.setAttribute("disabled", "disabled");
-    children.forEach((child) => {
-      child.setAttribute("disabled", "disabled");
-    });
-    scene.childNodes.forEach((child) => {
-      child.setAttribute("hidden", "hidden");
-    });
-  }
-
-  function handleHideExport() {
-    //----Enable main page buttons
-    let layout = document.querySelector("#layout");
-    let scene = document.querySelector("#scene");
-    let exportButton = document.querySelector("#export");
-    let children = layout.querySelectorAll("*");
-    exportButton.removeAttribute("disabled");
-    children.forEach((child) => {
-      child.removeAttribute("disabled");
-    });
-    scene.childNodes.forEach((child) => {
-      child.removeAttribute("hidden");
-    });
-    setExp();
   }
 
   //----Handles css properties to visually show user they clicked
@@ -255,13 +269,14 @@ export default function Home() {
     const scene = document.querySelector("#scene");
     if (!fullscreen.current) {
       scene.requestFullscreen();
+      handleHideSelect(); //Remove current element status so there's not an annoying yellow border
       document.addEventListener("fullscreenchange", onFullscreenChange);
     }
   }
 
   const onFullscreenChange = () => {
     const scene = document.querySelector("#scene");
-    fullscreen.current ? (scene.style.zoom = "1") : (scene.style.zoom = "1.67");
+    fullscreen.current ? (scene.style.zoom = "1") : (scene.style.zoom = "1.66");
     fullscreen.current = !fullscreen.current;
   };
 
@@ -287,9 +302,17 @@ export default function Home() {
     setSceneFooter(false);
   }
 
-  //----------Manages border for selected current element---------\\
+  function handleHideSelect() {
+    setCurrentElement(<Empty type="empty" />);
+    document.querySelector("#theme").setAttribute("hidden", "hidden");
+  }
+
+  //----------Manages border for selected current element and property tab show/hide---------\\
   useEffect(() => {
     if (currentElement) {
+      if (currentElement.props.type != "empty") {
+        document.querySelector("#theme").removeAttribute("hidden");
+      }
       console.log("Name: ", currentElement.props.name);
       let allSceneElements = document.querySelectorAll(`.sceneC`);
       allSceneElements.forEach((element) => {
@@ -301,6 +324,22 @@ export default function Home() {
       });
     }
   }, [currentElement]);
+
+  //----------Manages property tab show/hide when user deletes all elements from the scene---------\\
+  useEffect(() => {
+    if (
+      elements.length === 0 &&
+      sceneFooter === false &&
+      sceneHeader === false
+    ) {
+      setCurrentElement(<Empty type="empty" />);
+      document.querySelector("#theme").setAttribute("hidden", "hidden");
+      scene.classList.add("rounded-tl-md");
+      scene.classList.add("rounded-tr-md");
+      scene.classList.add("rounded-bl-md");
+      scene.classList.add("rounded-br-md");
+    }
+  }, [elements, sceneFooter, sceneHeader]);
 
   return (
     <currentElementContext.Provider value={currentElement}>
@@ -350,7 +389,7 @@ export default function Home() {
               Add Text
             </button>
           </div>
-          <div>
+          <div className="createError flex-col items-center">
             <div
               id="scene"
               className="flex-col w-sceneW h-sceneH mt-10  rounded-sm"
@@ -361,39 +400,55 @@ export default function Home() {
               </div>
               <Background
                 id="moveable"
-                elements={elements}
+                type="background"
                 setCurrentElement={setCurrentElement}
               />
+              {elements}
               <div id="SceneFooter" className="basis-content">
                 {sceneFooter}
               </div>
             </div>
-            <div className="flex justify-center gap-40 mt-10">
-              <button
-                id="export"
-                className="border-white border-2 pl-1 pr-1 rounded-md"
-                onClick={handleExport}
-              >
-                Export Theme
-              </button>
-              <button className="border-white border-2 pl-1 pr-1 rounded-md">
-                Save Theme
-              </button>
-              <button onClick={handleFullscreen}>Fullscreen</button>
-              <button onClick={handleClearscreen}>Clear Screen</button>
+            <div className="grow"></div>
+            <div className="flex justify-center gap-40 mt-10 text-gray-200 bg-pageHBg rounded-md h-VH5 w-[80%] mb-10">
+              <div className="flex gap-2 items-center basis-3/5">
+                <button className="ml-5" onClick={handleClearscreen}>
+                  Clear Screen
+                </button>
+                <span className="mb-1 text-gray-400">|</span>
+                <button onClick={handleFullscreen}>Full Screen</button>
+                <span className="mb-1 text-gray-400">|</span>
+                <button
+                  className="pl-1 pr-1 rounded-md"
+                  onClick={handleHideSelect}
+                >
+                  Hide Select
+                </button>
+              </div>
+              <div className="flex gap-2 items-center justify-end mr-5 basis-2/5">
+                <button
+                  id="export"
+                  className="pl-1 pr-1 rounded-md"
+                  onClick={handleExport}
+                >
+                  Export Theme
+                </button>
+                <span className="mb-1 text-gray-400">|</span>
+                <button className="pl-1 pr-1 rounded-md">Save Theme</button>
+              </div>
             </div>
           </div>
-          <div
-            id="theme"
-            className="ml-VW5 w-layout_themeW h-layout_themeH bg-layoutBg"
-          >
-            <Properties
-              newProperty={newProperty}
-              currentElement={currentElement}
-              elements={elements}
-              setElements={setElements}
-              setCurrentElement={setCurrentElement}
-            />
+          <div className="h-layout_themeH w-layout_themeW ml-VW5 mr-2">
+            <div id="theme" hidden="hidden">
+              <Properties
+                newProperty={newProperty}
+                currentElement={currentElement}
+                elements={elements}
+                setElements={setElements}
+                setCurrentElement={setCurrentElement}
+                setSceneHeader={setSceneHeader}
+                setSceneFooter={setSceneFooter}
+              />
+            </div>
           </div>
         </main>
       </currentProperties.Provider>

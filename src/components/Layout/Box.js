@@ -1,15 +1,10 @@
 import { Rnd } from "react-rnd";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, cloneElement } from "react";
 
 import { currentProperties } from "../../app/context";
 import { currentElementContext } from "../../app/context";
 
-export default function Box({
-  id,
-  name,
-  setCurrentElement,
-  handleNewProperty,
-}) {
+export default function Box({ id, name, setCurrentElement }) {
   //----Context
   const newProperties = useContext(currentProperties);
   const currentElement = useContext(currentElementContext);
@@ -38,10 +33,16 @@ export default function Box({
   }
 
   //----useEffect required in order to prevent element from continually rerendering because setHeight and setWidth statees are directly called in this function
+  let cEPropsId;
+
+  if (currentElement != "hide") {
+    cEPropsId = currentElement.props.id;
+  }
+
   useEffect(() => {
     for (let element in newProperties) {
       //If this element's id matches the theme element's id and is current selected assign new height/width
-      if (element === id && element === currentElement.props.id) {
+      if (element === id && element === cEPropsId) {
         for (let property in newProperties[element]) {
           if (property === "width") {
             setWidth(newProperties[element][property]);
@@ -51,7 +52,7 @@ export default function Box({
         }
       }
     }
-  }, [newProperties, currentElement.props.id, id]);
+  }, [newProperties, cEPropsId, id]);
 
   //----Component to return (defined as a variable to allow the currentElement state to access it)
   let component = (
