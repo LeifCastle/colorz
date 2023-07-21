@@ -18,6 +18,7 @@ module.exports = {
         VW5: "5vw",
         VW1: "1vw",
         VW12: "12vw",
+        VH5: "5vh",
       },
       colors: {
         //#4E4B3C gold color alt

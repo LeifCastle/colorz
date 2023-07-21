@@ -14,6 +14,8 @@ export default function Properties({
   elements,
   setElements,
   setCurrentElement,
+  setSceneHeader,
+  setSceneFooter,
 }) {
   const currentElement = useContext(currentElementContext);
   let propertyList = [];
@@ -25,36 +27,47 @@ export default function Properties({
         propertyList = [
           <Height handleNewProperty={handleNewProperty} key="height" />,
           <Background handleNewProperty={handleNewProperty} key="background" />,
+          <Name_Delete
+            elements={elements}
+            setElements={setElements}
+            setCurrentElement={setCurrentElement}
+            setSceneHeader={setSceneHeader}
+            setSceneFooter={setSceneFooter}
+            key="delete"
+          />,
         ];
         break;
       case "box":
         propertyList = [
+          <Height handleNewProperty={handleNewProperty} key="height" />,
+          <Width handleNewProperty={handleNewProperty} key="width" />,
+          <Background handleNewProperty={handleNewProperty} key="background" />,
           <Name_Delete
             elements={elements}
             setElements={setElements}
             setCurrentElement={setCurrentElement}
             key="delete"
           />,
-          <Height handleNewProperty={handleNewProperty} key="height" />,
-          <Width handleNewProperty={handleNewProperty} key="width" />,
-          <Background handleNewProperty={handleNewProperty} key="background" />,
         ];
         break;
       case "textbox":
         propertyList = [
+          <FontSize handleNewProperty={handleNewProperty} key="fontSize" />,
+          <FontFamily handleNewProperty={handleNewProperty} key="fontFamily" />,
           <Name_Delete
             elements={elements}
             setElements={setElements}
             setCurrentElement={setCurrentElement}
             key="delete"
           />,
-          <FontSize handleNewProperty={handleNewProperty} key="fontSize" />,
-          <FontFamily handleNewProperty={handleNewProperty} key="fontFamily" />,
         ];
         break;
       case "background":
         propertyList = [
           <Background handleNewProperty={handleNewProperty} key="background" />,
+          <div className="bg-[#909090] flex justify-between mt-10 rounded-bl-md rounded-br-md">
+            <div className="pl-2 w-[70px]"></div>
+          </div>,
         ];
         break;
     }
@@ -66,5 +79,24 @@ export default function Properties({
     newProperty(newPropertys);
   }
 
-  return <div>{propertyList}</div>;
+  //----Inset property values except for Name_Delete
+  let paddedList = propertyList.map((property) => {
+    if (property.key != "delete") {
+      return <div className="pl-2 mb-2">{property}</div>;
+    } else {
+      return <div>{property}</div>;
+    }
+  });
+
+  return (
+    <div className="flex-col items-center mt-VW1 w-full h-auto bg-pageHBg text-layoutText_Border rounded-md">
+      <p
+        id="propertiesName"
+        className="text-center text-2xl mb-4 w-full bg-[#4E4B3C] rounded-tl-md rounded-tr-md text-gray-200"
+      >
+        Properties
+      </p>
+      <div className="">{paddedList}</div>
+    </div>
+  );
 }

@@ -6,30 +6,59 @@ export default function Name_Delete({
   elements,
   setElements,
   setCurrentElement,
+  setSceneHeader,
+  setSceneFooter,
 }) {
   const currentElement = useContext(currentElementContext);
   const [nameDisplay, setNameDisplay] = useState(currentElement.props.name);
 
   //----Deletes an element from the scene
   function handleDeleteElement() {
-    let newElements = [];
-    elements.forEach((element) => {
-      //----If the element's key does not match the currentElement's key keep it
-      if (element.props.id != currentElement.props.id) {
-        newElements.push(element);
-      }
-    });
-    setElements(newElements);
+    if (currentElement.props.type === "header") {
+      let scene = document.querySelector("#moveable");
+      scene.classList.add("rounded-tl-md");
+      scene.classList.add("rounded-tr-md");
+      let sh = document.querySelector("#sh");
+      sh.classList.remove("border-lhfBorderSelect");
+      sh.classList.add("border-lhfBorderNoSelect");
+      sh.classList.remove("bg-lhfBackgroundSelect");
+      sh.classList.add("bg-lhfBackgroundNoSelect");
+      setSceneHeader(false);
+    } else if (currentElement.props.type === "footer") {
+      let scene = document.querySelector("#moveable");
+      scene.classList.add("rounded-tl-md");
+      scene.classList.add("rounded-tr-md");
+      let sf = document.querySelector("#sf");
+      sf.classList.remove("border-lhfBorderSelect");
+      sf.classList.add("border-lhfBorderNoSelect");
+      sf.classList.remove("bg-lhfBackgroundSelect");
+      sf.classList.add("bg-lhfBackgroundNoSelect");
+      setSceneFooter(false);
+    } else {
+      let newElements = [];
+      elements.forEach((element) => {
+        //----If the element's key does not match the currentElement's key keep it
+        if (element.props.id != currentElement.props.id) {
+          newElements.push(element);
+        }
+      });
+      setElements(newElements);
+    }
   }
 
   //----When user mouses on an element's name, change name div to an input
   function handleMouseOver() {
-    setNameDisplay(
-      <input
-        className="text-black w-[70px]"
-        placeholder={currentElement.props.name}
-      ></input>
-    );
+    if (
+      currentElement.props.type != "header" &&
+      currentElement.props.type != "footer"
+    ) {
+      setNameDisplay(
+        <input
+          className="text-black w-[70px]"
+          placeholder={currentElement.props.name}
+        ></input>
+      );
+    }
   }
 
   //----When user mouses off an element's name, change input to name div and update element's name (id)
@@ -60,7 +89,7 @@ export default function Name_Delete({
   }, [currentElement]);
 
   return (
-    <div className="bg-[#909090] flex justify-between">
+    <div className="bg-[#909090] flex justify-between mt-10 rounded-bl-md rounded-br-md">
       <div
         className="pl-2 w-[70px]"
         onMouseOver={handleMouseOver}
