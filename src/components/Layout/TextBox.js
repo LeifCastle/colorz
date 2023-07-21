@@ -80,16 +80,16 @@ export default function TextBox({ id, setCurrentElement, handleNewProperty }) {
       onResize={updateCurrentElement}
       onClick={updateCurrentElement}
     >
-      <div
+      <textarea
         ref={textBoxRef}
         contentEditable={true}
+        placeholder="Text..."
+        className="placeholder-slate-400 bg-transparent resize-none overflow-hidden"
         style={{ width: "100%", height: "100%", outline: "none" }}
         onInput={(e) => {
           // Handle text input if needed
         }}
-      >
-        Type here...
-      </div>
+      ></textarea>
     </Rnd>
   );
 
