@@ -52,6 +52,11 @@ export default function Properties({
           <FontFamily handleNewProperty={handleNewProperty} key="fontFamily" />,
         ];
         break;
+      case "background":
+        propertyList = [
+          <Background handleNewProperty={handleNewProperty} key="background" />,
+        ];
+        break;
     }
   }
 
