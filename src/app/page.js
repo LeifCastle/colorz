@@ -13,6 +13,7 @@ import Background from "../components/Layout/Background";
 import Empty from "../components/Empty";
 
 import Properties from "../components/Properties";
+import axios from "axios";
 
 export default function Home() {
   const [currentElement, setCurrentElement] = useState(); //current element context
@@ -307,13 +308,65 @@ export default function Home() {
     document.querySelector("#theme").setAttribute("hidden", "hidden");
   }
 
+  function handleSave() {
+    let background = document.querySelector("#moveable");
+    let saveData = {
+      name: "test",
+      backgroundColor: background.style.backgroundColor,
+      elements: [],
+    };
+
+    //Scene Elements
+    elements.forEach((element) => {
+      let css = document.querySelector(`#${element.props.id}`);
+      let parentElement = css.parentElement;
+
+      //--Get X/Y position
+      const absolutePosition = css.getBoundingClientRect();
+      const parentAbsolutePosition = parentElement.getBoundingClientRect();
+      let xPosition = absolutePosition.left - parentAbsolutePosition.left;
+      let yPosition = absolutePosition.top - parentAbsolutePosition.top;
+
+      //Fix this later with CSS to prevent object being able to be there in the first place
+      if (xPosition < 0) {
+        xPosition = 0;
+      }
+      if (yPosition < 0) {
+        yPosition = 0;
+      }
+
+      if (element.props.type === "box") {
+        saveData.elements.push({
+          type: element.props.type,
+          name: element.props.name,
+          xPosition: Math.floor(xPosition),
+          yPosition: Math.floor(yPosition),
+          width: css.style.width,
+          height: css.style.height,
+          backgroundColor: css.style.backgroundColor,
+        });
+      }
+    });
+    console.log("Data: ", saveData);
+    axios
+      .post(`http://localhost:8000/themes/new`, saveData)
+      .then((res) => {
+        // handleNewData();
+        // router.refresh();
+        console.log("res---", res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   //----------Manages border for selected current element and property tab show/hide---------\\
   useEffect(() => {
     if (currentElement) {
       if (currentElement.props.type != "empty") {
         document.querySelector("#theme").removeAttribute("hidden");
       }
-      console.log("Name: ", currentElement.props.name);
+      //console.log("Name: ", currentElement.props.name);
       let allSceneElements = document.querySelectorAll(`.sceneC`);
       allSceneElements.forEach((element) => {
         if (element.id != currentElement.props.id) {
@@ -392,7 +445,7 @@ export default function Home() {
           <div className="createError flex-col items-center">
             <div
               id="scene"
-              className="flex-col w-sceneW h-sceneH mt-10  rounded-sm"
+              className="flex-col w-sceneW h-sceneH mt-10 relative rounded-sm"
             >
               {exp}
               <div id="SceneHeader" className="basis-content">
@@ -402,8 +455,8 @@ export default function Home() {
                 id="moveable"
                 type="background"
                 setCurrentElement={setCurrentElement}
+                elements={elements}
               />
-              {elements}
               <div id="SceneFooter" className="basis-content">
                 {sceneFooter}
               </div>
@@ -433,7 +486,9 @@ export default function Home() {
                   Export Theme
                 </button>
                 <span className="mb-1 text-gray-400">|</span>
-                <button className="pl-1 pr-1 rounded-md">Save Theme</button>
+                <button className="pl-1 pr-1 rounded-md" onClick={handleSave}>
+                  Save Theme
+                </button>
               </div>
             </div>
           </div>
