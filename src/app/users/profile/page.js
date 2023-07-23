@@ -56,6 +56,16 @@ export default function Profile() {
             console.log(error);
             router.push("/users/login");
           });
+        //Theme Data
+        axios
+          .get(`http://localhost:8000/themes`)
+          .then((response) => {
+            // data is an object
+            <p>Response: {response}</p>;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       } else {
         router.push("/users/login");
       }
