@@ -4,6 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { currentProperties } from "./context";
 import { currentElementContext } from "./context";
 
+import jwtDecode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import handleLogout from "./utils/handleLogout";
+
 import PageHeader from "../components/PageHeader";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
@@ -14,6 +18,7 @@ import Empty from "../components/Empty";
 
 import Properties from "../components/Properties";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [currentElement, setCurrentElement] = useState(); //current element context
@@ -24,6 +29,8 @@ export default function Home() {
   const [sceneProperties, setSceneProperties] = useState({}); //An element's height
   const [exp, setExp] = useState();
   const fullscreen = useRef(false);
+  const router = useRouter();
+  const [userEmail, setUserEmail] = useState(null);
 
   function handleNewHeader(event) {
     let scene = document.querySelector("#moveable");
@@ -309,56 +316,108 @@ export default function Home() {
   }
 
   function handleSave() {
-    let background = document.querySelector("#moveable");
-    let saveData = {
-      name: "test",
-      backgroundColor: background.style.backgroundColor,
-      elements: [],
-    };
+    console.log("LI: ", loggedin, "UE: ", userEmail);
+    if (loggedin) {
+      let background = document.querySelector("#moveable");
+      let saveData = {
+        user: userEmail,
+        name: "test",
+        backgroundColor: background.style.backgroundColor,
+        elements: [],
+      };
 
-    //Scene Elements
-    elements.forEach((element) => {
-      let css = document.querySelector(`#${element.props.id}`);
-      let parentElement = css.parentElement;
+      //Scene Elements
+      elements.forEach((element) => {
+        let css = document.querySelector(`#${element.props.id}`);
+        let parentElement = css.parentElement;
 
-      //--Get X/Y position
-      const absolutePosition = css.getBoundingClientRect();
-      const parentAbsolutePosition = parentElement.getBoundingClientRect();
-      let xPosition = absolutePosition.left - parentAbsolutePosition.left;
-      let yPosition = absolutePosition.top - parentAbsolutePosition.top;
+        //--Get X/Y position
+        const absolutePosition = css.getBoundingClientRect();
+        const parentAbsolutePosition = parentElement.getBoundingClientRect();
+        let xPosition = absolutePosition.left - parentAbsolutePosition.left;
+        let yPosition = absolutePosition.top - parentAbsolutePosition.top;
 
-      //Fix this later with CSS to prevent object being able to be there in the first place
-      if (xPosition < 0) {
-        xPosition = 0;
-      }
-      if (yPosition < 0) {
-        yPosition = 0;
-      }
+        //Fix this later with CSS to prevent object being able to be there in the first place
+        if (xPosition < 0) {
+          xPosition = 0;
+        }
+        if (yPosition < 0) {
+          yPosition = 0;
+        }
 
-      if (element.props.type === "box") {
-        saveData.elements.push({
-          type: element.props.type,
-          name: element.props.name,
-          xPosition: Math.floor(xPosition),
-          yPosition: Math.floor(yPosition),
-          width: css.style.width,
-          height: css.style.height,
-          backgroundColor: css.style.backgroundColor,
-        });
-      }
-    });
-    console.log("Data: ", saveData);
-    axios
-      .post(`http://localhost:8000/themes/new`, saveData)
-      .then((res) => {
-        // handleNewData();
-        // router.refresh();
-        console.log("res---", res);
-      })
-      .catch((error) => {
-        console.log(error);
+        if (element.props.type === "box") {
+          saveData.elements.push({
+            type: element.props.type,
+            name: element.props.name,
+            xPosition: Math.floor(xPosition),
+            yPosition: Math.floor(yPosition),
+            width: css.style.width,
+            height: css.style.height,
+            backgroundColor: css.style.backgroundColor,
+          });
+        }
       });
+      console.log("Data: ", saveData);
+      axios
+        .post(`http://localhost:8000/themes/new`, saveData)
+        .then((res) => {
+          // handleNewData();
+          // router.refresh();
+          console.log("res---", res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log("You're not logged in buddy");
+    }
   }
+
+  //-------------------------------------User whatnot
+  const [data, setData] = useState(null);
+  const [loggedin, setLoggedIn] = useState(false);
+
+  //----Sets user expiration time...commented out for development purposes :)
+  // if (typeof window !== undefined) {
+  //   const expirationTime = new Date(
+  //     parseInt(localStorage.getItem("expiration")) * 1000
+  //   );
+  //   let currentTime = Date.now();
+
+  //   //----Lougout user after expiration time is met
+  //   if (currentTime >= expirationTime) {
+  //     handleLogout();
+  //     router.push("/users/login");
+  //   }
+  // }
+
+  //Checks if user is logged in and sets user data accordingly
+  useEffect(() => {
+    setAuthToken(localStorage.getItem("jwtToken"));
+    if (localStorage.getItem("jwtToken")) {
+      axios
+        .get(
+          `http://localhost:8000/users/email/${localStorage.getItem("email")}`
+        )
+        .then((response) => {
+          let userData = jwtDecode(localStorage.getItem("jwtToken"));
+          if (userData.email === localStorage.getItem("email")) {
+            setUserEmail(userData.email);
+            setData(response.data.user[0]);
+            setLoggedIn(true);
+          } else {
+            setLoggedIn(false);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoggedIn(false);
+        });
+    } else {
+      console.log("Not Logged In");
+      setLoggedIn(false);
+    }
+  }, [router]);
 
   //----------Manages border for selected current element and property tab show/hide---------\\
   useEffect(() => {
