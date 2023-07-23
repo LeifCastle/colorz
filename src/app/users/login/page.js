@@ -51,7 +51,7 @@ export default function Login() {
 
   //----If user succesfully logs in redirect them to their profile page
   if (redirect) {
-    router.push("/users/profile");
+    router.push("/users/my_themes");
   }
 
   //----If user does not succesfully log in display error
