@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, createFactory } from "react";
 
 import { currentProperties } from "./context";
 import { currentElementContext } from "./context";
@@ -31,6 +31,30 @@ export default function Home() {
   const fullscreen = useRef(false);
   const router = useRouter();
   const [userEmail, setUserEmail] = useState(null);
+  const cRef = useRef();
+  const themeName = useRef();
+
+  useEffect(() => {
+    if (localStorage.getItem("userTheme")) {
+      let data = JSON.parse(localStorage.getItem("userTheme"));
+      console.log("Users theme is: ", data);
+      data.elements.forEach((element) => {
+        switch (element.type) {
+          case "box":
+            handleNewBox();
+            let propertiesCopy = { ...sceneProperties }; //Create a copy of current properties
+            propertiesCopy[cRef.current.key] = {
+              ...sceneProperties[cRef.current.key], //Assigns any previous properties to the copied element
+            };
+            propertiesCopy[cRef.current.key]["backgroundColor"] =
+              element.backgroundColor; //Create/update new property's key and value
+            console.log(propertiesCopy);
+            setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
+        }
+      });
+      localStorage.removeItem("userTheme");
+    }
+  }, [localStorage.getItem("userTheme")]);
 
   function handleNewHeader(event) {
     let scene = document.querySelector("#moveable");
@@ -109,7 +133,7 @@ export default function Home() {
     }
   }
 
-  function handleNewBox(event) {
+  function handleNewBox() {
     let countArray = boxCount.current.split("");
     let count = parseInt(countArray.pop());
     boxCount.current = `box${count + 1}`; //Increment key/id counter
@@ -123,9 +147,9 @@ export default function Home() {
         handleNewProperty={newProperty}
       />
     );
-
     setElements([...elements, newElement]);
     setCurrentElement(newElement); //Set current element equal to this
+    cRef.current = newElement;
   }
 
   function handleNewTextBox() {
@@ -154,6 +178,7 @@ export default function Home() {
       ...sceneProperties[currentElement.key], //Assigns any previous properties to the copied element
     };
     propertiesCopy[currentElement.key][newKey] = property[newKey].toString(); //Create/update new property's key and value
+    console.log("Real: ", propertiesCopy);
     setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
   }
 
@@ -315,61 +340,79 @@ export default function Home() {
     document.querySelector("#theme").setAttribute("hidden", "hidden");
   }
 
+  function handleThemeName(event) {
+    themeName.current = event.target.value;
+  }
+
   function handleSave() {
-    console.log("LI: ", loggedin, "UE: ", userEmail);
-    if (loggedin) {
-      let background = document.querySelector("#moveable");
-      let saveData = {
-        user: userEmail,
-        name: "test",
-        backgroundColor: background.style.backgroundColor,
-        elements: [],
-      };
+    setExp(
+      <div className="bg-[#49525A] rounded-md p-3 overflow-y-scroll">
+        <p>Please give your theme a name:</p>
+        <input
+          type="text"
+          placeholder="MyTheme"
+          className="text-white bg-slate-600 rounded-md w-[70px]"
+          onChange={(event) => handleThemeName(event)}
+        ></input>
+        <button onClick={saveR}>Save</button>
+      </div>
+    );
+    function saveR() {
+      console.log("LI: ", loggedin, "UE: ", userEmail);
+      if (loggedin) {
+        let background = document.querySelector("#moveable");
+        let saveData = {
+          user: userEmail,
+          name: themeName.current,
+          backgroundColor: background.style.backgroundColor,
+          elements: [],
+        };
 
-      //Scene Elements
-      elements.forEach((element) => {
-        let css = document.querySelector(`#${element.props.id}`);
-        let parentElement = css.parentElement;
+        //Scene Elements
+        elements.forEach((element) => {
+          let css = document.querySelector(`#${element.props.id}`);
+          let parentElement = css.parentElement;
 
-        //--Get X/Y position
-        const absolutePosition = css.getBoundingClientRect();
-        const parentAbsolutePosition = parentElement.getBoundingClientRect();
-        let xPosition = absolutePosition.left - parentAbsolutePosition.left;
-        let yPosition = absolutePosition.top - parentAbsolutePosition.top;
+          //--Get X/Y position
+          const absolutePosition = css.getBoundingClientRect();
+          const parentAbsolutePosition = parentElement.getBoundingClientRect();
+          let xPosition = absolutePosition.left - parentAbsolutePosition.left;
+          let yPosition = absolutePosition.top - parentAbsolutePosition.top;
 
-        //Fix this later with CSS to prevent object being able to be there in the first place
-        if (xPosition < 0) {
-          xPosition = 0;
-        }
-        if (yPosition < 0) {
-          yPosition = 0;
-        }
+          //Fix this later with CSS to prevent object being able to be there in the first place
+          if (xPosition < 0) {
+            xPosition = 0;
+          }
+          if (yPosition < 0) {
+            yPosition = 0;
+          }
 
-        if (element.props.type === "box") {
-          saveData.elements.push({
-            type: element.props.type,
-            name: element.props.name,
-            xPosition: Math.floor(xPosition),
-            yPosition: Math.floor(yPosition),
-            width: css.style.width,
-            height: css.style.height,
-            backgroundColor: css.style.backgroundColor,
-          });
-        }
-      });
-      console.log("Data: ", saveData);
-      axios
-        .post(`http://localhost:8000/themes/new`, saveData)
-        .then((res) => {
-          // handleNewData();
-          // router.refresh();
-          console.log("res---", res);
-        })
-        .catch((error) => {
-          console.log(error);
+          if (element.props.type === "box") {
+            saveData.elements.push({
+              type: element.props.type,
+              name: element.props.name,
+              xPosition: Math.floor(xPosition),
+              yPosition: Math.floor(yPosition),
+              width: css.style.width,
+              height: css.style.height,
+              backgroundColor: css.style.backgroundColor,
+            });
+          }
         });
-    } else {
-      console.log("You're not logged in buddy");
+        console.log("Data: ", saveData);
+        axios
+          .post(`http://localhost:8000/themes/new`, saveData)
+          .then((res) => {
+            // handleNewData();
+            // router.refresh();
+            console.log("res---", res);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("You're not logged in buddy");
+      }
     }
   }
 
@@ -422,6 +465,7 @@ export default function Home() {
   //----------Manages border for selected current element and property tab show/hide---------\\
   useEffect(() => {
     if (currentElement) {
+      //console.log("CE: ", currentElement);
       if (currentElement.props.type != "empty") {
         document.querySelector("#theme").removeAttribute("hidden");
       }

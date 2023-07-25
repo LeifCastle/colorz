@@ -18,7 +18,6 @@ export default function PageHeader() {
   }
 
   useEffect(() => {
-    //----Sets user expiration time
     if (localStorage.getItem("jwtToken")) {
       setSignup_login("account");
       setLogout(

@@ -12,19 +12,20 @@ export default function Account() {
   const [data, setData] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
-  //----Sets user expiration time
-  if (typeof window !== undefined) {
-    const expirationTime = new Date(
-      parseInt(localStorage.getItem("expiration")) * 1000
-    );
-    let currentTime = Date.now();
+  // ALso not working..logging user out when they nav to this page even if they just signed in
+  // //----Sets user expiration time
+  // if (typeof window !== undefined) {
+  //   const expirationTime = new Date(
+  //     parseInt(localStorage.getItem("expiration")) * 1000
+  //   );
+  //   let currentTime = Date.now();
 
-    //----Lougout user after expiration time is met
-    if (currentTime >= expirationTime) {
-      handleLogout();
-      router.push("/users/login");
-    }
-  }
+  //   //----Lougout user after expiration time is met
+  //   if (currentTime >= expirationTime) {
+  //     handleLogout();
+  //     router.push("/users/login");
+  //   }
+  // }
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -57,7 +58,7 @@ export default function Account() {
   if (isLoading) return <p>Loading...</p>;
   if (!data) return <p>No data shown...</p>;
   return (
-    <div className="">
+    <div>
       <PageHeader />
       <p>First Name: {data.firstName}</p>
       <p>Last Name: {data.lastName}</p>
