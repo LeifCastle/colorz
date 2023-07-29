@@ -14,6 +14,7 @@ export default function Box({ id, name, setCurrentElement }) {
   const [y, setY] = useState(100); //The box's y position relative to its parent
   const [width, setWidth] = useState("50px"); //The box's width
   const [height, setHeight] = useState("50px"); //The box's height
+  const [first, setFirst] = useState(true);
 
   //----Element's default properties
   let defaultProperties = {
@@ -22,7 +23,6 @@ export default function Box({ id, name, setCurrentElement }) {
 
   //----If this element's id matches the theme element's id assign new property values,
   for (let element in newProperties) {
-    console.log("Element: ", element, "Id: ", id);
     if (element === id) {
       for (let property in newProperties[element]) {
         if (property !== "width" && property != "height") {
