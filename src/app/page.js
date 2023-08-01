@@ -33,25 +33,63 @@ export default function Home() {
   const [userEmail, setUserEmail] = useState(null);
   const cRef = useRef();
   const themeName = useRef();
+  const sr = useRef([]);
+  const pr = useRef([]);
+
+  // function setInitial(element) {
+  //   // let propertiesCopy = { ...sceneProperties }; //Create a copy of current properties
+  //   // propertiesCopy[element] = {
+  //   //   ...sceneProperties[element], //Assigns any previous properties to the copied element
+  //   // };
+  //   // console.log("Attempt: ", propertiesCopy);
+  //   // console.log("Match: ", element);
+  //   // propertiesCopy[element]["initial"] = false; //Create/update new property's key and value
+  //   // //console.log("Real: ", propertiesCopy);
+  //   // setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
+  // }
 
   useEffect(() => {
     if (localStorage.getItem("userTheme")) {
       let data = JSON.parse(localStorage.getItem("userTheme"));
       console.log("Users theme is: ", data);
+      sr.current = [];
       data.elements.forEach((element) => {
         switch (element.type) {
           case "box":
-            handleNewBox();
-            let propertiesCopy = { ...sceneProperties }; //Create a copy of current properties
-            propertiesCopy[cRef.current.key] = {
-              ...sceneProperties[cRef.current.key], //Assigns any previous properties to the copied element
-            };
-            propertiesCopy[cRef.current.key]["backgroundColor"] =
-              element.backgroundColor; //Create/update new property's key and value
-            console.log(propertiesCopy);
-            setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
+            let countArray = boxCount.current.split("");
+            let count = parseInt(countArray.pop());
+            boxCount.current = `box${count + 1}`; //Increment key/id counter
+            let newElement = (
+              <Box
+                key={boxCount.current}
+                id={boxCount.current}
+                name={boxCount.current}
+                type="box"
+                setCurrentElement={setCurrentElement}
+                handleNewProperty={newProperty}
+              />
+            );
+            sr.current.push(newElement);
+            setCurrentElement(newElement); //Set current element equal to this
+            cRef.current = newElement;
+
+            console.log("New Box added");
+            pr.current[cRef.current.key] = {};
+            pr.current[cRef.current.key]["backgroundColor"] =
+              element.backgroundColor;
+            pr.current[cRef.current.key]["width"] = element.width;
+            //Uneeded right?
+            pr.current[cRef.current.key]["initial"] = true;
+            // propertiesCopy[cRef.current.key]["backgroundColor"] =
+            //   element.backgroundColor; //Create/update new property's key and value
+            // propertiesCopy[cRef.current.key]["width"] = element.width; //Create/update new property's key and value
+            // propertiesCopy[cRef.current.key]["initial"] = true;
+            console.log("PR: ", pr.current);
         }
       });
+      console.log("SR: ", sr.current);
+      setElements(sr.current);
+      setSceneProperties(pr.current); //Set the sceneProperties state to copy
       localStorage.removeItem("userTheme");
     }
   }, [localStorage.getItem("userTheme")]);
