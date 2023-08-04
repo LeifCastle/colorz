@@ -2,7 +2,10 @@ import { useState, useRef } from "react";
 
 import { useRouter } from "next/navigation";
 
-export default function userThemes({ themes }) {
+//Add are you sure box & yes/no button and change theme.name to be id
+//  or no becuase you dont' want double named anyway?
+
+export default function userThemes({ themes, handleDeleteTheme }) {
   const router = useRouter();
 
   function handleUserTheme(theme) {
@@ -33,14 +36,20 @@ export default function userThemes({ themes }) {
         display={false}
       >
         <div id={"interactive" + theme.name} hidden="hidden" className="h-full">
-          <button className="bg-lhfBackgroundSelect w-full h-[50%] rounded-tl-md rounded-tr-md mb-4">
+          <button className="bg-lhfBackgroundSelect w-full h-[32%] rounded-tl-md rounded-tr-md mb-4">
             Export Theme
           </button>
           <button
-            className="bg-lhfBackgroundSelect w-full h-[50%] rounded-bl-md rounded-br-md"
+            className="bg-lhfBackgroundSelect w-full h-[32%] mb-4"
             onClick={() => handleUserTheme(theme)}
           >
             View/Edit Theme
+          </button>
+          <button
+            className="bg-lhfBackgroundSelect text-[#EF1717] w-full h-[25%] rounded-bl-md rounded-br-md"
+            onClick={() => handleDeleteTheme(theme.name)}
+          >
+            Delete Theme
           </button>
         </div>
         <p id={"name" + theme.name} className="text-2xl">

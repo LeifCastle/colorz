@@ -30,6 +30,23 @@ export default function Account() {
   //   }
   // }
 
+  function handleDeleteTheme(theme) {
+    //is this if statement really necessary?
+    if (loggedIn) {
+      axios
+        .delete(`http://localhost:8000/themes/${theme}`, {
+          data: { user: localStorage.getItem("email") },
+        })
+        //Update theme state to reflect deleted theme
+        .then((response) => {
+          setThemes([...response.data.themes]);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
+    }
+  }
+
   useEffect(() => {
     setAuthToken(localStorage.getItem("jwtToken"));
     if (localStorage.getItem("jwtToken")) {
@@ -75,7 +92,7 @@ export default function Account() {
       <PageHeader />
       <div>
         My Themes:
-        <UserThemes themes={themes} />
+        <UserThemes themes={themes} handleDeleteTheme={handleDeleteTheme} />
       </div>
     </div>
   );
