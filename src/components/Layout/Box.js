@@ -36,9 +36,23 @@ export default function Box({ id, name, setCurrentElement }) {
   for (let element in newProperties) {
     if (element === id && elRef.current[element] === true) {
       for (let property in newProperties[element]) {
-        if (property === "width") {
-          console.log(element, "'s width property set");
-          setWidth(newProperties[element][property]);
+        switch (property) {
+          case "width":
+            setWidth(newProperties[element][property]);
+            break;
+          case "height":
+            setHeight(newProperties[element][property]);
+            break;
+          case "xPosition":
+            setX(newProperties[element][property]);
+            break;
+          case "yPosition":
+            setY(newProperties[element][property]);
+            break;
+          //Doesn't work
+          // case "name":
+          //   newProperties[element]["name"] = newProperties[element][property];
+          //   break;
         }
       }
       elRef.current[element] = false;

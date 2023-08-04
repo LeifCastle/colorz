@@ -33,20 +33,10 @@ export default function Home() {
   const [userEmail, setUserEmail] = useState(null);
   const cRef = useRef();
   const themeName = useRef();
+
+  //Both of these are basically refs to set up user's theme if exists bc state doesn't update in time in a loop
   const sr = useRef([]);
   const pr = useRef([]);
-
-  // function setInitial(element) {
-  //   // let propertiesCopy = { ...sceneProperties }; //Create a copy of current properties
-  //   // propertiesCopy[element] = {
-  //   //   ...sceneProperties[element], //Assigns any previous properties to the copied element
-  //   // };
-  //   // console.log("Attempt: ", propertiesCopy);
-  //   // console.log("Match: ", element);
-  //   // propertiesCopy[element]["initial"] = false; //Create/update new property's key and value
-  //   // //console.log("Real: ", propertiesCopy);
-  //   // setSceneProperties(propertiesCopy); //Set the sceneProperties state to copy
-  // }
 
   useEffect(() => {
     if (localStorage.getItem("userTheme")) {
@@ -78,12 +68,12 @@ export default function Home() {
             pr.current[cRef.current.key]["backgroundColor"] =
               element.backgroundColor;
             pr.current[cRef.current.key]["width"] = element.width;
+            pr.current[cRef.current.key]["height"] = element.height;
+            pr.current[cRef.current.key]["xPosition"] = element.xPosition;
+            pr.current[cRef.current.key]["yPosition"] = element.yPosition;
+            pr.current[cRef.current.key]["name"] = element.name;
             //Uneeded right?
             pr.current[cRef.current.key]["initial"] = true;
-            // propertiesCopy[cRef.current.key]["backgroundColor"] =
-            //   element.backgroundColor; //Create/update new property's key and value
-            // propertiesCopy[cRef.current.key]["width"] = element.width; //Create/update new property's key and value
-            // propertiesCopy[cRef.current.key]["initial"] = true;
             console.log("PR: ", pr.current);
         }
       });
