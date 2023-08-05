@@ -23,7 +23,9 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 export default function Home() {
-  console.log(process.env.API);
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+  console.log(`Base API URL: ${BASE_URL}`);
   const [currentElement, setCurrentElement] = useState(); //current element context
   const boxCount = useRef("box0");
   const [elements, setElements] = useState([]); //Drag and drop elements
@@ -436,7 +438,7 @@ export default function Home() {
         });
         console.log("Data: ", saveData);
         axios
-          .post(`${process.env.API}/themes/new`, saveData)
+          .post(`${BASE_URL}/themes/new`, saveData)
           .then((res) => {
             // handleNewData();
             // router.refresh();
@@ -474,7 +476,7 @@ export default function Home() {
     setAuthToken(localStorage.getItem("jwtToken"));
     if (localStorage.getItem("jwtToken")) {
       axios
-        .get(`${process.env.API}/users/email/${localStorage.getItem("email")}`)
+        .get(`${BASE_URL}/users/email/${localStorage.getItem("email")}`)
         .then((response) => {
           let userData = jwtDecode(localStorage.getItem("jwtToken"));
           if (userData.email === localStorage.getItem("email")) {

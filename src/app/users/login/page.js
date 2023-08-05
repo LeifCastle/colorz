@@ -15,7 +15,9 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
-  console.log(`Base API URL: ${process.env.API}`);
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+  console.log(`Base API URL: ${BASE_URL}`);
 
   //----Input event handlers
   const handleEmail = (e) => {
@@ -32,7 +34,7 @@ export default function Login() {
     //----Sets user expiration time
     if (typeof window !== undefined) {
       axios
-        .post(`${process.env.API}/users/login`, {
+        .post(`${BASE_URL}/users/login`, {
           email,
           password,
         })
