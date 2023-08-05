@@ -32,6 +32,7 @@ export default function userThemes({ themes, handleDeleteTheme }) {
         onMouseOver={() => handleThemeInspect(theme.name)}
         onMouseOut={() => handleThemeNoInspect(theme.name)}
         display={false}
+        key={theme.name}
       >
         <div id={"interactive" + theme.name} hidden="hidden" className="h-full">
           <button className="bg-lhfBackgroundSelect w-full h-[32%] rounded-tl-md rounded-tr-md mb-4">

@@ -82,7 +82,7 @@ export default function Home() {
       setSceneProperties(pr.current); //Set the sceneProperties state to copy
       localStorage.removeItem("userTheme");
     }
-  }, [localStorage.getItem("userTheme")]);
+  }, [localStorage.getItem("userTheme"), newProperty]);
 
   function handleNewHeader(event) {
     let scene = document.querySelector("#moveable");

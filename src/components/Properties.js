@@ -85,9 +85,13 @@ export default function Properties({
   //----Inset property values except for Name_Delete
   let paddedList = propertyList.map((property) => {
     if (property.key != "delete") {
-      return <div className="pl-2 mb-2">{property}</div>;
+      return (
+        <div key="notDelete" className="pl-2 mb-2">
+          {property}
+        </div>
+      );
     } else {
-      return <div>{property}</div>;
+      return <div key="delete">{property}</div>;
     }
   });
 
