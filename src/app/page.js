@@ -19,7 +19,8 @@ import Empty from "../components/Empty";
 import Properties from "../components/Properties";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 
 export default function Home() {
   console.log(process.env.API);

@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import PageHeader from "../../../components/PageHeader";
-require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 
 const Signup = () => {
   const router = useRouter();
