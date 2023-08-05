@@ -15,6 +15,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
+  console.log(`Base API URL: ${process.env.API}`);
+
   //----Input event handlers
   const handleFirstName = (e) => {
     setFirstName(e.target.value);
@@ -41,7 +43,7 @@ const Signup = () => {
     };
     //--Post to server new user
     axios
-      .post(`${process.env.API}users/signup`, newUser) //process.env.NEXT_PUBLIC_SERVER_URL
+      .post(`${process.env.API}/users/signup`, newUser) //process.env.NEXT_PUBLIC_SERVER_URL
       .then((response) => {
         setRedirect(true);
       })

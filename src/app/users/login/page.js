@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
 import PageHeader from "../../../components/PageHeader";
-const { API } = process.env;
 
 export default function Login() {
   const router = useRouter();
@@ -14,6 +13,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  console.log(`Base API URL: ${process.env.API}`);
 
   //----Input event handlers
   const handleEmail = (e) => {
@@ -30,7 +30,7 @@ export default function Login() {
     //----Sets user expiration time
     if (typeof window !== undefined) {
       axios
-        .post(`${API}/users/login`, {
+        .post(`${process.env.API}/users/login`, {
           email,
           password,
         })
