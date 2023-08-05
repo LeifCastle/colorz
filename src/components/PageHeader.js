@@ -40,7 +40,7 @@ export default function PageHeader() {
       setLogout();
       setMyThemes();
     }
-  }, [handleLogoutButton]);
+  }, []);
 
   //Capitalize login/profile (needs to be lower case because its also used to define a route)
   let array = signup_login.split("");

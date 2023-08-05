@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 //Add are you sure box & yes/no button and change theme.name to be id
 //  or no becuase you dont' want double named anyway?
 
-export default function userThemes({ themes, handleDeleteTheme }) {
+export default function UserThemes({ themes, handleDeleteTheme }) {
   const router = useRouter();
 
   function handleUserTheme(theme) {
