@@ -15,6 +15,9 @@ export default function Account() {
   const [themes, setThemes] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
 
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+
   //--This is preventing users from loggin in not quite sure the nature or scope of the error but i think its only a problem if they haven't signed in on that browerser session once already
   // //----Sets user expiration time
   // if (typeof window !== undefined) {
@@ -34,7 +37,7 @@ export default function Account() {
     //is this if statement really necessary?
     if (loggedIn) {
       axios
-        .delete(`${process.env.API}/themes/${theme}`, {
+        .delete(`${BASE_URL}/themes/${theme}`, {
           data: { user: localStorage.getItem("email") },
         })
         //Update theme state to reflect deleted theme
@@ -51,7 +54,7 @@ export default function Account() {
     setAuthToken(localStorage.getItem("jwtToken"));
     if (localStorage.getItem("jwtToken")) {
       axios
-        .get(`${process.env.API}/users/email/${localStorage.getItem("email")}`)
+        .get(`${BASE_URL}/users/email/${localStorage.getItem("email")}`)
         .then((response) => {
           // data is an object
           let userData = jwtDecode(localStorage.getItem("jwtToken"));
@@ -70,7 +73,7 @@ export default function Account() {
         });
       //Theme Data
       axios
-        .get(`${process.env.API}/themes/${localStorage.getItem("email")}`)
+        .get(`${BASE_URL}/themes/${localStorage.getItem("email")}`)
         .then((response) => {
           setThemes([...response.data]);
         })
