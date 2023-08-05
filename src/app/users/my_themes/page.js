@@ -34,7 +34,7 @@ export default function Account() {
     //is this if statement really necessary?
     if (loggedIn) {
       axios
-        .delete(`http://localhost:8000/themes/${theme}`, {
+        .delete(`${process.env.API}/themes/${theme}`, {
           data: { user: localStorage.getItem("email") },
         })
         //Update theme state to reflect deleted theme
@@ -51,9 +51,7 @@ export default function Account() {
     setAuthToken(localStorage.getItem("jwtToken"));
     if (localStorage.getItem("jwtToken")) {
       axios
-        .get(
-          `http://localhost:8000/users/email/${localStorage.getItem("email")}`
-        )
+        .get(`${process.env.API}/users/email/${localStorage.getItem("email")}`)
         .then((response) => {
           // data is an object
           let userData = jwtDecode(localStorage.getItem("jwtToken"));
@@ -72,7 +70,7 @@ export default function Account() {
         });
       //Theme Data
       axios
-        .get(`http://localhost:8000/themes/${localStorage.getItem("email")}`)
+        .get(`${process.env.API}/themes/${localStorage.getItem("email")}`)
         .then((response) => {
           setThemes([...response.data]);
         })
