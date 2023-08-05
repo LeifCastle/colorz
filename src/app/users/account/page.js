@@ -6,6 +6,7 @@ import handleLogout from "../../utils/handleLogout";
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
 import PageHeader from "../../../components/PageHeader";
+const { API } = process.env;
 
 export default function Account() {
   const router = useRouter();
@@ -32,9 +33,7 @@ export default function Account() {
       setAuthToken(localStorage.getItem("jwtToken"));
       if (localStorage.getItem("jwtToken")) {
         axios
-          .get(
-            `${process.env.API}/users/email/${localStorage.getItem("email")}`
-          )
+          .get(`${API}/users/email/${localStorage.getItem("email")}`)
           .then((response) => {
             // data is an object
             let userData = jwtDecode(localStorage.getItem("jwtToken"));
