@@ -38,8 +38,8 @@ export default function Home() {
   const sr = useRef([]);
   const pr = useRef([]);
 
-  if (typeof window !== undefined) {
-    useEffect(() => {
+  useEffect(() => {
+    if (typeof window !== undefined) {
       if (localStorage.getItem("userTheme")) {
         let data = JSON.parse(localStorage.getItem("userTheme"));
         console.log("Users theme is: ", data);
@@ -83,8 +83,9 @@ export default function Home() {
         setSceneProperties(pr.current); //Set the sceneProperties state to copy
         localStorage.removeItem("userTheme");
       }
-    }, []);
-  }
+    }
+  }, []);
+
   //localStorage.getItem("userTheme"), newProperty
 
   function handleNewHeader(event) {
