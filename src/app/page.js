@@ -38,51 +38,54 @@ export default function Home() {
   const sr = useRef([]);
   const pr = useRef([]);
 
-  useEffect(() => {
-    if (localStorage.getItem("userTheme")) {
-      let data = JSON.parse(localStorage.getItem("userTheme"));
-      console.log("Users theme is: ", data);
-      sr.current = [];
-      data.elements.forEach((element) => {
-        switch (element.type) {
-          case "box":
-            let countArray = boxCount.current.split("");
-            let count = parseInt(countArray.pop());
-            boxCount.current = `box${count + 1}`; //Increment key/id counter
-            let newElement = (
-              <Box
-                key={boxCount.current}
-                id={boxCount.current}
-                name={boxCount.current}
-                type="box"
-                setCurrentElement={setCurrentElement}
-                handleNewProperty={newProperty}
-              />
-            );
-            sr.current.push(newElement);
-            setCurrentElement(newElement); //Set current element equal to this
-            cRef.current = newElement;
+  if (typeof window !== undefined) {
+    useEffect(() => {
+      if (localStorage.getItem("userTheme")) {
+        let data = JSON.parse(localStorage.getItem("userTheme"));
+        console.log("Users theme is: ", data);
+        sr.current = [];
+        data.elements.forEach((element) => {
+          switch (element.type) {
+            case "box":
+              let countArray = boxCount.current.split("");
+              let count = parseInt(countArray.pop());
+              boxCount.current = `box${count + 1}`; //Increment key/id counter
+              let newElement = (
+                <Box
+                  key={boxCount.current}
+                  id={boxCount.current}
+                  name={boxCount.current}
+                  type="box"
+                  setCurrentElement={setCurrentElement}
+                  handleNewProperty={newProperty}
+                />
+              );
+              sr.current.push(newElement);
+              setCurrentElement(newElement); //Set current element equal to this
+              cRef.current = newElement;
 
-            console.log("New Box added");
-            pr.current[cRef.current.key] = {};
-            pr.current[cRef.current.key]["backgroundColor"] =
-              element.backgroundColor;
-            pr.current[cRef.current.key]["width"] = element.width;
-            pr.current[cRef.current.key]["height"] = element.height;
-            pr.current[cRef.current.key]["xPosition"] = element.xPosition;
-            pr.current[cRef.current.key]["yPosition"] = element.yPosition;
-            pr.current[cRef.current.key]["name"] = element.name;
-            //Uneeded right?
-            pr.current[cRef.current.key]["initial"] = true;
-            console.log("PR: ", pr.current);
-        }
-      });
-      console.log("SR: ", sr.current);
-      setElements(sr.current);
-      setSceneProperties(pr.current); //Set the sceneProperties state to copy
-      localStorage.removeItem("userTheme");
-    }
-  }, [localStorage.getItem("userTheme"), newProperty]);
+              console.log("New Box added");
+              pr.current[cRef.current.key] = {};
+              pr.current[cRef.current.key]["backgroundColor"] =
+                element.backgroundColor;
+              pr.current[cRef.current.key]["width"] = element.width;
+              pr.current[cRef.current.key]["height"] = element.height;
+              pr.current[cRef.current.key]["xPosition"] = element.xPosition;
+              pr.current[cRef.current.key]["yPosition"] = element.yPosition;
+              pr.current[cRef.current.key]["name"] = element.name;
+              //Uneeded right?
+              pr.current[cRef.current.key]["initial"] = true;
+              console.log("PR: ", pr.current);
+          }
+        });
+        console.log("SR: ", sr.current);
+        setElements(sr.current);
+        setSceneProperties(pr.current); //Set the sceneProperties state to copy
+        localStorage.removeItem("userTheme");
+      }
+    }, []);
+  }
+  //localStorage.getItem("userTheme"), newProperty
 
   function handleNewHeader(event) {
     let scene = document.querySelector("#moveable");
