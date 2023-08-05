@@ -19,8 +19,10 @@ import Empty from "../components/Empty";
 import Properties from "../components/Properties";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+require("dotenv").config();
 
 export default function Home() {
+  console.log(process.env.API);
   const [currentElement, setCurrentElement] = useState(); //current element context
   const boxCount = useRef("box0");
   const [elements, setElements] = useState([]); //Drag and drop elements

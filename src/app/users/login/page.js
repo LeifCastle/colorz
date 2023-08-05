@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
 import PageHeader from "../../../components/PageHeader";
+require("dotenv").config();
 
 export default function Login() {
   const router = useRouter();
