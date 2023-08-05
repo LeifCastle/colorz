@@ -65,7 +65,10 @@ export default function Properties({
       case "background":
         propertyList = [
           <Background handleNewProperty={handleNewProperty} key="background" />,
-          <div className="bg-[#909090] flex justify-between mt-10 rounded-bl-md rounded-br-md">
+          <div
+            key="unkown"
+            className="bg-[#909090] flex justify-between mt-10 rounded-bl-md rounded-br-md"
+          >
             <div className="pl-2 w-[70px]"></div>
           </div>,
         ];

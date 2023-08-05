@@ -1,5 +1,3 @@
-import { useState, useRef } from "react";
-
 import { useRouter } from "next/navigation";
 
 //Add are you sure box & yes/no button and change theme.name to be id
