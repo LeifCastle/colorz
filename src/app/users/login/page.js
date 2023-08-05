@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import setAuthToken from "../../utils/setAuthToken";
@@ -29,7 +29,7 @@ export default function Login() {
     //----Sets user expiration time
     if (typeof window !== undefined) {
       axios
-        .post(`http://localhost:8000/users/login`, {
+        .post(`${process.env.API}/users/login`, {
           email,
           password,
         })

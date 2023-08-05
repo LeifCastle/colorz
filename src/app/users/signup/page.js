@@ -41,7 +41,7 @@ const Signup = () => {
     };
     //--Post to server new user
     axios
-      .post(`http://localhost:8000/users/signup`, newUser) //process.env.NEXT_PUBLIC_SERVER_URL
+      .post(`${process.env.API}users/signup`, newUser) //process.env.NEXT_PUBLIC_SERVER_URL
       .then((response) => {
         setRedirect(true);
       })

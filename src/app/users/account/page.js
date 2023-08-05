@@ -33,7 +33,7 @@ export default function Account() {
       if (localStorage.getItem("jwtToken")) {
         axios
           .get(
-            `http://localhost:8000/users/email/${localStorage.getItem("email")}`
+            `${process.env.API}/users/email/${localStorage.getItem("email")}`
           )
           .then((response) => {
             // data is an object

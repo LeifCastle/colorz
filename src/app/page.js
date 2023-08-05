@@ -433,7 +433,7 @@ export default function Home() {
         });
         console.log("Data: ", saveData);
         axios
-          .post(`http://localhost:8000/themes/new`, saveData)
+          .post(`${process.env.API}/themes/new`, saveData)
           .then((res) => {
             // handleNewData();
             // router.refresh();
@@ -471,9 +471,7 @@ export default function Home() {
     setAuthToken(localStorage.getItem("jwtToken"));
     if (localStorage.getItem("jwtToken")) {
       axios
-        .get(
-          `http://localhost:8000/users/email/${localStorage.getItem("email")}`
-        )
+        .get(`${process.env.API}/users/email/${localStorage.getItem("email")}`)
         .then((response) => {
           let userData = jwtDecode(localStorage.getItem("jwtToken"));
           if (userData.email === localStorage.getItem("email")) {
