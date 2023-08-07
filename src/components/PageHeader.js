@@ -7,8 +7,9 @@ import handleLogout from "../app/utils/handleLogout";
 
 export default function PageHeader() {
   //State Variables
-  const [logout, setLogout] = useState();
-  const [pageTabs, setPageTabs] = useState();
+  const [logout, setLogout] = useState(); //User login/logout button
+  const [pageTabs, setPageTabs] = useState(); //Page tabs for user navigation
+  const [dependency, setDependency] = useState(false); //Dependency varibale for the useEffect hook that checks if a user is loged in or not
 
   //Router
   const router = useRouter();
@@ -19,6 +20,16 @@ export default function PageHeader() {
     router.refresh(); //Neccesary to refresh pageHeader tabs when the user logs out from the home page
     handleLogout();
   }
+
+  //The purpose of this useEffect is to allow localStorage (which doesn't exist until the window is loaded)
+  //...to be a dependency variable for the useEffect hook that checks if a user is logged in or not
+  useEffect(() => {
+    if (localStorage) {
+      setDependency(false);
+    } else {
+      setDependency(localStorage.getItem("jwtToken"));
+    }
+  }, []);
 
   //If the user is signed in, show Home, My Themes, My Account, and Logout tabs, otherwise only show Home and Login tab
   //Home Tab and "Colorz" text are repeated in both to avoid text jolt from when state values kick in
@@ -62,7 +73,7 @@ export default function PageHeader() {
       );
       setLogout();
     }
-  }, [localStorage.getItem("jwtToken")]);
+  }, [dependency]);
 
   return (
     <div
