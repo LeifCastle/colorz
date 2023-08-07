@@ -16,22 +16,7 @@ export default function Account() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const BASE_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-
-  //--This is preventing users from loggin in not quite sure the nature or scope of the error but i think its only a problem if they haven't signed in on that browerser session once already
-  // //----Sets user expiration time
-  // if (typeof window !== undefined) {
-  //   const expirationTime = new Date(
-  //     parseInt(localStorage.getItem("expiration")) * 1000
-  //   );
-  //   let currentTime = Date.now();
-
-  //   //----Lougout user after expiration time is met
-  //   if (currentTime >= expirationTime) {
-  //     handleLogout();
-  //     router.push("/users/login");
-  //   }
-  // }
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
 
   function handleDeleteTheme(theme) {
     //is this if statement really necessary?
@@ -86,8 +71,9 @@ export default function Account() {
     }
   }, [router]);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No data shown...</p>;
+  //Prevent's tiny visual header "refresh" while data is being aquired
+  if (isLoading || !data) return <PageHeader />;
+
   return (
     <div className="">
       <PageHeader />

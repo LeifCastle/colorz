@@ -1,12 +1,11 @@
 "use client";
-import { useState, useEffect, useRef, createFactory } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { currentProperties } from "./context";
 import { currentElementContext } from "./context";
 
 import jwtDecode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
-import handleLogout from "./utils/handleLogout";
 
 import PageHeader from "../components/PageHeader";
 import Header from "../components/Layout/Header";
@@ -19,13 +18,10 @@ import Empty from "../components/Empty";
 import Properties from "../components/Properties";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-const dotenv = require("dotenv");
-dotenv.config();
 
 export default function Home() {
   const BASE_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-  console.log(`Base API URL: ${BASE_URL}`);
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
   const [currentElement, setCurrentElement] = useState(); //current element context
   const boxCount = useRef("box0");
   const [elements, setElements] = useState([]); //Drag and drop elements
@@ -90,8 +86,6 @@ export default function Home() {
       }
     }
   }, []);
-
-  //localStorage.getItem("userTheme"), newProperty
 
   function handleNewHeader(event) {
     let scene = document.querySelector("#moveable");
@@ -456,20 +450,6 @@ export default function Home() {
   //-------------------------------------User whatnot
   const [data, setData] = useState(null);
   const [loggedin, setLoggedIn] = useState(false);
-
-  //----Sets user expiration time...commented out for development purposes :)
-  // if (typeof window !== undefined) {
-  //   const expirationTime = new Date(
-  //     parseInt(localStorage.getItem("expiration")) * 1000
-  //   );
-  //   let currentTime = Date.now();
-
-  //   //----Lougout user after expiration time is met
-  //   if (currentTime >= expirationTime) {
-  //     handleLogout();
-  //     router.push("/users/login");
-  //   }
-  // }
 
   //Checks if user is logged in and sets user data accordingly
   useEffect(() => {

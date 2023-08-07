@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import PageHeader from "../../../components/PageHeader";
-const dotenv = require("dotenv");
-dotenv.config();
 
 const Signup = () => {
   const router = useRouter();
@@ -18,8 +16,7 @@ const Signup = () => {
   const [error, setError] = useState(false);
 
   const BASE_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-  console.log(`Base API URL: ${BASE_URL}`);
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
 
   //----Input event handlers
   const handleFirstName = (e) => {

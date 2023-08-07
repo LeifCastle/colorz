@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 import setAuthToken from "../../utils/setAuthToken";
 import jwtDecode from "jwt-decode";
 import PageHeader from "../../../components/PageHeader";
-const dotenv = require("dotenv");
-dotenv.config();
 
 export default function Login() {
   const router = useRouter();
@@ -16,8 +14,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const BASE_URL =
-    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-  console.log(`Base API URL: ${BASE_URL}`);
+    process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
 
   //----Input event handlers
   const handleEmail = (e) => {
@@ -30,28 +27,24 @@ export default function Login() {
   //----Form submit event handler
   const handleSubmit = (e) => {
     e.preventDefault(); // prevent default html form refresh
-    //Change post address to .env variable
-    //----Sets user expiration time
-    if (typeof window !== undefined) {
-      axios
-        .post(`${BASE_URL}/users/login`, {
-          email,
-          password,
-        })
-        .then((response) => {
-          console.log("R:", response);
-          localStorage.setItem("jwtToken", response.data.token);
-          localStorage.setItem("email", response.data.userData.email);
-          localStorage.setItem("expiration", response.data.userData.exp);
-          setAuthToken(response.data.token);
-          let decoded = jwtDecode(response.data.token);
-          setRedirect(true);
-        })
-        .catch((error) => {
-          console.log("E:", error);
-          setError(error.response.data.message);
-        });
-    }
+    axios
+      .post(`${BASE_URL}/users/login`, {
+        email,
+        password,
+      })
+      .then((response) => {
+        console.log("R:", response);
+        localStorage.setItem("jwtToken", response.data.token);
+        localStorage.setItem("email", response.data.userData.email);
+        localStorage.setItem("expiration", response.data.userData.exp);
+        setAuthToken(response.data.token);
+        let decoded = jwtDecode(response.data.token);
+        setRedirect(true);
+      })
+      .catch((error) => {
+        console.log("E:", error);
+        setError(error.response.data.message);
+      });
   };
 
   //----If user succesfully logs in redirect them to their profile page
